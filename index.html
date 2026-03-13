@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#0A1628"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="SpecTa AI Tutor — IELTS, TOEFL, SAT, GMAT Preparation"/>
+<title>SpecTa AI Tutor</title>
+<link rel="apple-touch-icon" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0A1628;--navy2:#0F2040;
+  --blue:#1A4FA0;--blue-mid:#2563B8;--blue-light:#4A90E2;
+  --sky:#E8F1FB;--sky2:#D0E4F7;
+  --accent:#F5A623;--accent-soft:#FEF3DC;
+  --teal:#00B4A6;--teal-soft:#E0F9F7;
+  --green:#16A34A;--green-soft:#DCFCE7;
+  --purple:#7C3AED;--purple-soft:#EDE9FE;
+  --coral:#E55A4E;--coral-soft:#FEE2E0;
+  --white:#FFFFFF;--surface:#F4F7FC;
+  --border:#D4E0F2;--border2:#C5D8EF;
+  --text:#0A1628;--muted:#5A6B8A;--light:#8FA0BC;
+  --r:14px;--r2:10px;--r3:20px;
+  --shadow:0 4px 20px rgba(10,22,40,0.10);
+  --shadow2:0 2px 10px rgba(10,22,40,0.07);
+  --nav-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;font-size:15px;}
+body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);line-height:1.6;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input,textarea,select{font-family:inherit;}
+img{display:block;}
+a{color:inherit;text-decoration:none;}
+
+/* ===== SCREEN SYSTEM ===== */
+.screen{position:fixed;inset:0;display:none;flex-direction:column;background:var(--surface);overflow:hidden;transition:opacity 0.25s;}
+.screen.active{display:flex;}
+
+/* ===== SCROLLABLE BODY ===== */
+.scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav-h) + 16px);}
+.scroll-body::-webkit-scrollbar{display:none;}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  background:var(--navy);
+  padding:14px 20px 12px;
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;
+  padding-top:max(14px, env(safe-area-inset-top));
+}
+.topbar-logo{height:28px;width:auto;filter:brightness(0) invert(1);object-fit:contain;}
+.topbar-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:white;flex:1;}
+.topbar-back{color:rgba(255,255,255,0.8);font-size:22px;line-height:1;padding:4px 8px 4px 0;}
+.topbar-action{color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:var(--nav-h);
+  background:var(--white);
+  border-top:1px solid var(--border);
+  display:flex;align-items:stretch;
+  z-index:100;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;font-size:10px;font-weight:500;color:var(--light);
+  transition:color 0.2s;padding-top:6px;
+}
+.nav-item.active{color:var(--blue);}
+.nav-item svg{width:22px;height:22px;}
+
+/* ===== WELCOME SCREEN ===== */
+#welcome{background:var(--navy);justify-content:space-between;}
+.welcome-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 20%, rgba(74,144,226,0.3) 0%, transparent 60%),
+             radial-gradient(ellipse at 10% 80%, rgba(245,166,35,0.15) 0%, transparent 50%);
+  pointer-events:none;
+}
+.welcome-top{padding:48px 28px 0;position:relative;z-index:1;}
+.welcome-logo-wrap{display:flex;align-items:center;gap:12px;margin-bottom:40px;}
+.welcome-logo{height:40px;width:auto;filter:brightness(0) invert(1);}
+.welcome-badge{
+  background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.4);
+  color:var(--accent);font-size:11px;font-weight:600;letter-spacing:0.06em;
+  padding:4px 12px;border-radius:20px;
+}
+.welcome-h1{font-family:'Sora',sans-serif;font-size:clamp(28px,8vw,42px);font-weight:800;color:white;line-height:1.15;margin-bottom:14px;}
+.welcome-h1 span{color:var(--accent);}
+.welcome-sub{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:320px;}
+.welcome-bottom{padding:0 28px 40px;position:relative;z-index:1;}
+.welcome-tests{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+.test-chip{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.8);font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:20px;
+}
+.btn{
+  display:block;width:100%;padding:16px;border-radius:var(--r);
+  font-family:'Sora',sans-serif;font-size:16px;font-weight:700;
+  text-align:center;transition:transform 0.15s,opacity 0.15s;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--accent);color:var(--navy);margin-bottom:12px;}
+.btn-outline{background:rgba(255,255,255,0.08);color:white;border:1px solid rgba(255,255,255,0.25);}
+
+/* ===== REGISTER SCREEN ===== */
+#register{background:white;}
+.reg-body{flex:1;overflow-y:auto;padding:24px 20px;-webkit-overflow-scrolling:touch;}
+.reg-body::-webkit-scrollbar{display:none;}
+.section-heading{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block;}
+.form-input{
+  width:100%;padding:13px 16px;border-radius:var(--r2);
+  border:1.5px solid var(--border);background:var(--surface);
+  font-size:15px;color:var(--text);
+  transition:border-color 0.2s;outline:none;
+}
+.form-input:focus{border-color:var(--blue);}
+.test-select-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+.test-select-card{
+  border:2px solid var(--border);border-radius:var(--r);
+  padding:14px;text-align:center;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+}
+.test-select-card.selected{border-color:var(--blue);background:var(--sky);}
+.test-select-card .emoji{font-size:24px;margin-bottom:6px;}
+.test-select-card h4{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);}
+.test-select-card p{font-size:11px;color:var(--muted);}
+.price-banner{
+  background:var(--sky);border:1px solid var(--border2);border-radius:var(--r);
+  padding:16px;display:flex;align-items:center;justify-content:space-between;
+  margin:20px 0;
+}
+.price-banner .amount{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--blue);}
+.price-banner .period{font-size:12px;color:var(--muted);}
+.price-banner .access{font-size:12px;color:var(--green);font-weight:600;}
+
+/* ===== TUTOR SELECT ===== */
+#tutor-select{}
+.tutor-select-body{flex:1;overflow-y:auto;padding:20px 16px;-webkit-overflow-scrolling:touch;}
+.tutor-select-body::-webkit-scrollbar{display:none;}
+.tutor-card-pick{
+  background:white;border:2px solid var(--border);border-radius:20px;
+  padding:24px 20px;margin-bottom:16px;cursor:pointer;
+  transition:border-color 0.2s,transform 0.15s,box-shadow 0.2s;
+  display:flex;align-items:center;gap:16px;
+}
+.tutor-card-pick:active{transform:scale(0.98);}
+.tutor-card-pick.selected{border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,79,160,0.1);}
+.tutor-avatar-sm{
+  width:72px;height:72px;border-radius:50%;flex-shrink:0;
+  overflow:hidden;position:relative;
+}
+.tutor-info h3{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.tutor-info .role{font-size:12px;font-weight:600;margin-bottom:6px;}
+.tutor-info p{font-size:12px;color:var(--muted);line-height:1.5;}
+.tutor-traits-sm{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.trait-sm{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;}
+
+/* ===== DASHBOARD ===== */
+#dashboard{}
+.dash-hero{
+  background:var(--navy);
+  padding:20px 20px 24px;
+}
+.dash-welcome{font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:2px;}
+.dash-name{font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:white;margin-bottom:16px;}
+.dash-progress-card{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+}
+.dash-score{
+  text-align:center;
+  background:rgba(245,166,35,0.2);border-radius:10px;padding:8px 14px;flex-shrink:0;
+}
+.dash-score-num{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--accent);}
+.dash-score-label{font-size:10px;color:rgba(255,255,255,0.6);font-weight:500;}
+.dash-progress-info{flex:1;}
+.dash-progress-info h4{font-size:13px;font-weight:600;color:white;margin-bottom:4px;}
+.progress-bar-wrap{background:rgba(255,255,255,0.15);border-radius:10px;height:6px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:10px;transition:width 0.5s;}
+.progress-pct{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;}
+
+.dash-sections{padding:20px 16px;}
+.dash-section-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.skill-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;cursor:pointer;transition:transform 0.15s,box-shadow 0.2s;
+}
+.skill-card:active{transform:scale(0.97);}
+.skill-card:hover{box-shadow:var(--shadow2);}
+.skill-icon{font-size:26px;margin-bottom:8px;}
+.skill-card h4{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.skill-card p{font-size:11px;color:var(--muted);}
+.skill-progress{margin-top:8px;background:var(--border);border-radius:10px;height:4px;overflow:hidden;}
+.skill-progress-fill{height:100%;border-radius:10px;}
+
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.quick-btn{
+  background:white;border:1px solid var(--border);border-radius:var(--r);
+  padding:14px;text-align:center;cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.2s;
+}
+.quick-btn:active{transform:scale(0.97);}
+.quick-btn .icon{font-size:22px;margin-bottom:6px;}
+.quick-btn p{font-size:12px;font-weight:600;color:var(--navy);}
+.quick-btn span{font-size:11px;color:var(--muted);}
+
+/* ===== LESSON SCREEN ===== */
+#lesson{background:var(--navy);}
+.lesson-body{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+/* TUTOR STAGE */
+.tutor-stage{
+  flex-shrink:0;
+  background:var(--navy2);
+  padding:16px 20px;
+  position:relative;
+  min-height:220px;
+  display:flex;align-items:flex-end;gap:14px;
+}
+.tutor-stage-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 120%, rgba(74,144,226,0.25) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* ===== AVATAR CSS ART ===== */
+.avatar-wrap{position:relative;width:100px;flex-shrink:0;z-index:1;}
+.avatar-body-anim{
+  animation:idle-breathe 3s ease-in-out infinite;
+}
+@keyframes idle-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* MAYA */
+.av-maya{width:100px;height:140px;position:relative;}
+.av-maya .body{
+  position:absolute;bottom:0;left:10px;right:10px;height:70px;
+  background:#1A4FA0;border-radius:12px 12px 6px 6px;
+}
+.av-maya .collar{
+  position:absolute;bottom:58px;left:30px;right:30px;height:18px;
+  background:#E8F1FB;border-radius:4px 4px 0 0;
+}
+.av-maya .neck{
+  position:absolute;bottom:70px;left:40px;right:40px;height:16px;
+  background:#F0C8A0;border-radius:4px;
+}
+.av-maya .head{
+  position:absolute;bottom:86px;left:14px;right:14px;height:58px;
+  background:#F0C8A0;border-radius:50% 50% 44% 44%;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.av-maya .hair{
+  position:absolute;bottom:120px;left:10px;right:10px;height:40px;
+  background:#2C1810;border-radius:50% 50% 20% 20%;
+}
+.av-maya .hair-side-l{
+  position:absolute;bottom:100px;left:10px;width:14px;height:30px;
+  background:#2C1810;border-radius:10px 0 0 10px;
+}
+.av-maya .hair-side-r{
+  position:absolute;bottom:100px;right:10px;width:14px;height:30px;
+  background:#2C1810;border-radius:0 10px 10px 0;
+}
+.av-maya .eye-l,.av-maya .eye-r{
+  position:absolute;width:9px;height:6px;
+  background:#2C1810;border-radius:50%;
+  bottom:112px;
+}
+.av-maya .eye-l{left:26px;}.av-maya .eye-r{right:26px;}
+.av-maya .nose{
+  position:absolute;bottom:104px;left:50%;transform:translateX(-50%);
+  width:6px;height:5px;background:#D4956A;border-radius:50% 50% 50% 50%;
+}
+.av-maya .mouth{
+  position:absolute;bottom:94px;left:50%;transform:translateX(-50%);
+  width:16px;height:5px;background:#C47050;border-radius:0 0 8px 8px;
+  transition:height 0.1s;transform-origin:top center;
+}
+.av-maya .earring-l,.av-maya .earring-r{
+  position:absolute;width:5px;height:8px;
+  background:var(--accent);border-radius:50%;
+  bottom:108px;
+}
+.av-maya .earring-l{left:14px;}.av-maya .earring-r{right:14px;}
+.av-maya .arm-l{
+  position:absolute;bottom:8px;left:-4px;width:16px;height:50px;
+  background:#1A4FA0;border-radius:8px;transform:rotate(-5deg);transform-origin:top center;
+}
+.av-maya .arm-r{
+  position:absolute;bottom:8px;right:-4px;width:16px;height:50px;
+  background:#1A4FA0;border-radius:8px;transform:rotate(5deg);transform-origin:top center;
+}
+
+/* ALEX */
+.av-alex{width:100px;height:140px;position:relative;}
+.av-alex .body{
+  position:absolute;bottom:0;left:8px;right:8px;height:70px;
+  background:#E55A4E;border-radius:12px 12px 6px 6px;
+}
+.av-alex .shirt-stripe{
+  position:absolute;bottom:10px;left:8px;right:8px;height:4px;
+  background:rgba(255,255,255,0.3);border-radius:2px;
+}
+.av-alex .neck{
+  position:absolute;bottom:68px;left:38px;right:38px;height:18px;
+  background:#E8B88A;border-radius:4px;
+}
+.av-alex .head{
+  position:absolute;bottom:82px;left:12px;right:12px;height:60px;
+  background:#E8B88A;border-radius:50% 50% 44% 44%;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.av-alex .hair{
+  position:absolute;bottom:124px;left:18px;right:18px;height:24px;
+  background:#3D2B1A;border-radius:40% 40% 10% 10%;
+}
+.av-alex .hair-front{
+  position:absolute;bottom:133px;left:22px;width:20px;height:16px;
+  background:#3D2B1A;border-radius:50% 20% 0 40%;
+}
+.av-alex .eye-l,.av-alex .eye-r{
+  position:absolute;width:10px;height:7px;
+  background:#2C1810;border-radius:50%;bottom:114px;
+}
+.av-alex .eye-l{left:24px;}.av-alex .eye-r{right:24px;}
+.av-alex .eyebrow-l,.av-alex .eyebrow-r{
+  position:absolute;width:12px;height:3px;
+  background:#3D2B1A;border-radius:2px;bottom:123px;
+}
+.av-alex .eyebrow-l{left:23px;transform:rotate(-5deg);}
+.av-alex .eyebrow-r{right:23px;transform:rotate(5deg);}
+.av-alex .nose{
+  position:absolute;bottom:105px;left:50%;transform:translateX(-50%);
+  width:7px;height:6px;background:#C49060;border-radius:50%;
+}
+.av-alex .mouth{
+  position:absolute;bottom:95px;left:50%;transform:translateX(-50%);
+  width:18px;height:5px;background:#B05030;border-radius:0 0 9px 9px;
+  transition:height 0.1s;transform-origin:top center;
+}
+.av-alex .arm-l{
+  position:absolute;bottom:10px;left:-6px;width:16px;height:52px;
+  background:#E55A4E;border-radius:8px;transform:rotate(-8deg);transform-origin:top center;
+}
+.av-alex .arm-r{
+  position:absolute;bottom:10px;right:-6px;width:16px;height:52px;
+  background:#E55A4E;border-radius:8px;transform:rotate(8deg);transform-origin:top center;
+}
+
+/* SARI */
+.av-sari{width:100px;height:140px;position:relative;}
+.av-sari .body{
+  position:absolute;bottom:0;left:6px;right:6px;height:72px;
+  background:#7C3AED;border-radius:14px 14px 6px 6px;
+}
+.av-sari .scarf{
+  position:absolute;bottom:60px;left:12px;right:12px;height:18px;
+  background:#A78BFA;border-radius:6px;
+}
+.av-sari .neck{
+  position:absolute;bottom:72px;left:37px;right:37px;height:16px;
+  background:#F5C8A8;border-radius:4px;
+}
+.av-sari .head{
+  position:absolute;bottom:84px;left:10px;right:10px;height:62px;
+  background:#F5C8A8;border-radius:50% 50% 44% 44%;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.av-sari .hair{
+  position:absolute;bottom:120px;left:8px;right:8px;height:40px;
+  background:#1C0A00;border-radius:50% 50% 10% 10%;
+}
+.av-sari .hair-long-l{
+  position:absolute;bottom:88px;left:6px;width:18px;height:50px;
+  background:#1C0A00;border-radius:10px 0 8px 10px;
+}
+.av-sari .hair-long-r{
+  position:absolute;bottom:88px;right:6px;width:18px;height:50px;
+  background:#1C0A00;border-radius:0 10px 10px 8px;
+}
+.av-sari .eye-l,.av-sari .eye-r{
+  position:absolute;width:9px;height:8px;
+  background:#1C0A00;border-radius:50%;bottom:116px;
+}
+.av-sari .eye-l{left:25px;}.av-sari .eye-r{right:25px;}
+.av-sari .lash-l,.av-sari .lash-r{
+  position:absolute;width:12px;height:2px;
+  background:#1C0A00;border-radius:2px;bottom:125px;
+}
+.av-sari .lash-l{left:23px;transform:rotate(-8deg);}
+.av-sari .lash-r{right:23px;transform:rotate(8deg);}
+.av-sari .nose{
+  position:absolute;bottom:108px;left:50%;transform:translateX(-50%);
+  width:6px;height:4px;background:#D49878;border-radius:50%;
+}
+.av-sari .mouth{
+  position:absolute;bottom:97px;left:50%;transform:translateX(-50%);
+  width:16px;height:6px;background:#C06060;border-radius:0 0 8px 8px;
+  transition:height 0.1s;transform-origin:top center;
+}
+.av-sari .cheek-l,.av-sari .cheek-r{
+  position:absolute;width:12px;height:7px;
+  background:rgba(240,120,120,0.25);border-radius:50%;bottom:105px;
+}
+.av-sari .cheek-l{left:18px;}.av-sari .cheek-r{right:18px;}
+.av-sari .arm-l{
+  position:absolute;bottom:8px;left:-4px;width:15px;height:52px;
+  background:#7C3AED;border-radius:8px;transform:rotate(-6deg);transform-origin:top center;
+}
+.av-sari .arm-r{
+  position:absolute;bottom:8px;right:-4px;width:15px;height:52px;
+  background:#7C3AED;border-radius:8px;transform:rotate(6deg);transform-origin:top center;
+}
+
+/* TALKING ANIMATION */
+@keyframes talking{
+  0%,100%{height:5px;border-radius:0 0 8px 8px;}
+  25%{height:10px;border-radius:0 0 8px 8px;}
+  50%{height:4px;border-radius:0 0 4px 4px;}
+  75%{height:12px;border-radius:0 0 10px 10px;}
+}
+@keyframes thinking{
+  0%,100%{transform:translateX(-50%) rotate(0deg);}
+  33%{transform:translateX(-50%) rotate(-8deg);}
+  66%{transform:translateX(-50%) rotate(6deg);}
+}
+.avatar-talking .mouth{animation:talking 0.35s steps(1,end) infinite!important;}
+.avatar-thinking .head{animation:thinking 1s ease-in-out infinite!important;}
+.avatar-thinking .hair,.avatar-thinking .hair-long-l,.avatar-thinking .hair-long-r{
+  animation:thinking 1s ease-in-out infinite!important;
+}
+
+/* SPEECH BUBBLE */
+.speech-bubble{
+  flex:1;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:14px 14px 14px 4px;
+  padding:12px 14px;z-index:1;align-self:flex-end;
+  position:relative;
+}
+.speech-bubble p{font-size:13px;color:rgba(255,255,255,0.9);line-height:1.6;min-height:40px;}
+.speech-bubble .tutor-name{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px;}
+.tts-controls{
+  position:absolute;bottom:10px;right:12px;
+  display:flex;gap:8px;align-items:center;
+}
+.tts-btn{
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  color:white;font-size:11px;padding:4px 10px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;
+}
+.speaking-indicator{
+  display:flex;gap:3px;align-items:center;
+}
+.speaking-dot{
+  width:4px;height:4px;border-radius:50%;background:var(--accent);
+  animation:speak-pulse 0.6s ease-in-out infinite;
+}
+.speaking-dot:nth-child(2){animation-delay:0.15s;}
+.speaking-dot:nth-child(3){animation-delay:0.3s;}
+@keyframes speak-pulse{0%,100%{transform:scaleY(1);opacity:0.5;}50%{transform:scaleY(2);opacity:1;}}
+
+/* WHITEBOARD */
+.whiteboard{
+  background:white;margin:0 16px 12px;border-radius:var(--r);
+  padding:16px;min-height:120px;flex-shrink:0;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+}
+.wb-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;}
+.wb-content{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);line-height:1.7;min-height:60px;}
+.wb-content .wb-highlight{background:var(--accent-soft);color:var(--navy);border-radius:4px;padding:0 4px;font-weight:600;}
+.wb-content .wb-step{
+  display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;
+}
+.wb-step-num{
+  background:var(--blue);color:white;font-size:10px;font-weight:700;
+  width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;
+}
+.wb-cursor{
+  display:inline-block;width:2px;height:14px;background:var(--blue);
+  animation:blink 0.8s ease-in-out infinite;margin-left:2px;vertical-align:middle;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* LESSON TABS */
+.lesson-tabs{
+  display:flex;gap:0;border-bottom:1px solid var(--border);
+  background:white;flex-shrink:0;overflow-x:auto;
+}
+.lesson-tabs::-webkit-scrollbar{display:none;}
+.lesson-tab{
+  padding:12px 16px;font-size:13px;font-weight:500;color:var(--muted);
+  border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0;
+  transition:color 0.2s,border-color 0.2s;
+}
+.lesson-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* LESSON CONTENT */
+.lesson-content-area{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;}
+.lesson-content-area::-webkit-scrollbar{display:none;}
+.lesson-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;margin-bottom:12px;cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.2s;
+}
+.lesson-card:active{transform:scale(0.98);}
+.lesson-card h4{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.lesson-card p{font-size:12px;color:var(--muted);}
+.lesson-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.lesson-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;}
+.lesson-duration{font-size:11px;color:var(--light);}
+
+/* ===== MOCK TEST ===== */
+#test{background:white;}
+.test-header{
+  background:var(--navy);padding:16px 20px;flex-shrink:0;
+}
+.test-info{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.test-section-name{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:white;}
+.test-timer{
+  background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.4);
+  color:var(--accent);font-family:'Sora',sans-serif;font-size:14px;font-weight:700;
+  padding:5px 12px;border-radius:20px;
+}
+.test-progress-dots{display:flex;gap:4px;flex-wrap:wrap;}
+.test-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(255,255,255,0.2);
+  transition:background 0.2s;
+}
+.test-dot.answered{background:var(--accent);}
+.test-dot.current{background:white;}
+
+.test-body{flex:1;overflow-y:auto;padding:20px 16px;-webkit-overflow-scrolling:touch;}
+.test-body::-webkit-scrollbar{display:none;}
+.question-num{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;}
+.question-text{font-family:'Sora',sans-serif;font-size:16px;font-weight:600;color:var(--navy);margin-bottom:20px;line-height:1.5;}
+.question-context{
+  background:var(--sky);border-left:3px solid var(--blue);
+  border-radius:0 var(--r2) var(--r2) 0;padding:14px;margin-bottom:20px;
+  font-size:13px;color:var(--text);line-height:1.7;
+  font-style:italic;
+}
+.options-list{display:flex;flex-direction:column;gap:10px;}
+.option-btn{
+  background:white;border:2px solid var(--border);border-radius:var(--r);
+  padding:14px 16px;text-align:left;width:100%;
+  font-size:14px;color:var(--text);
+  display:flex;align-items:center;gap:12px;
+  transition:border-color 0.2s,background 0.2s;
+}
+.option-btn.selected{border-color:var(--blue);background:var(--sky);}
+.option-btn.correct{border-color:var(--green);background:var(--green-soft);}
+.option-btn.wrong{border-color:var(--coral);background:var(--coral-soft);}
+.option-letter{
+  width:28px;height:28px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;
+  transition:border-color 0.2s,background 0.2s,color 0.2s;
+}
+.option-btn.selected .option-letter{border-color:var(--blue);background:var(--blue);color:white;}
+.test-nav{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;gap:10px;flex-shrink:0;background:white;
+}
+.btn-secondary{
+  flex:1;padding:14px;border-radius:var(--r);
+  font-family:'Sora',sans-serif;font-size:14px;font-weight:700;
+  background:var(--surface);color:var(--navy);
+  border:1.5px solid var(--border);
+}
+.btn-blue{
+  flex:2;padding:14px;border-radius:var(--r);
+  font-family:'Sora',sans-serif;font-size:14px;font-weight:700;
+  background:var(--blue);color:white;
+}
+
+/* AI EXPLANATION BOX */
+.ai-explanation{
+  background:var(--sky);border:1px solid var(--border2);border-radius:var(--r);
+  padding:14px;margin-top:16px;display:none;
+}
+.ai-explanation.show{display:block;}
+.ai-explanation .ai-label{
+  font-size:11px;font-weight:600;color:var(--blue);
+  display:flex;align-items:center;gap:6px;margin-bottom:8px;
+}
+.ai-explanation p{font-size:13px;color:var(--text);line-height:1.7;}
+
+/* ===== CHAT SCREEN ===== */
+#chat{background:var(--surface);}
+.chat-body{
+  flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:12px;
+  -webkit-overflow-scrolling:touch;
+}
+.chat-body::-webkit-scrollbar{display:none;}
+.msg{display:flex;gap:10px;align-items:flex-start;max-width:85%;}
+.msg.user{margin-left:auto;flex-direction:row-reverse;}
+.msg-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--blue);color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;font-weight:700;
+}
+.msg-bubble{
+  padding:12px 14px;border-radius:14px;
+  font-size:13px;line-height:1.6;
+}
+.msg.ai .msg-bubble{
+  background:white;border:1px solid var(--border);
+  border-top-left-radius:4px;color:var(--text);
+}
+.msg.user .msg-bubble{
+  background:var(--blue);color:white;
+  border-top-right-radius:4px;
+}
+.msg-name{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;}
+.msg.user .msg-name{text-align:right;}
+.chat-typing{
+  display:flex;gap:10px;align-items:center;
+  padding:10px 14px;background:white;border:1px solid var(--border);
+  border-radius:14px;border-top-left-radius:4px;width:fit-content;
+}
+.typing-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--muted);
+  animation:type-bounce 1s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes type-bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-8px);}}
+
+.chat-input-wrap{
+  padding:10px 14px;background:white;border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:flex-end;flex-shrink:0;
+  padding-bottom:max(10px,env(safe-area-inset-bottom));
+}
+.chat-input{
+  flex:1;border:1.5px solid var(--border);border-radius:22px;
+  padding:10px 16px;font-size:14px;resize:none;max-height:100px;
+  outline:none;line-height:1.4;
+  transition:border-color 0.2s;
+}
+.chat-input:focus{border-color:var(--blue);}
+.chat-send{
+  width:40px;height:40px;border-radius:50%;background:var(--blue);
+  color:white;font-size:18px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.suggest-chips{
+  display:flex;gap:8px;overflow-x:auto;padding:0 14px 8px;
+  flex-shrink:0;
+}
+.suggest-chips::-webkit-scrollbar{display:none;}
+.suggest-chip{
+  background:white;border:1px solid var(--border2);color:var(--blue);
+  font-size:12px;font-weight:500;padding:7px 14px;border-radius:20px;
+  white-space:nowrap;flex-shrink:0;cursor:pointer;
+  transition:background 0.15s;
+}
+.suggest-chip:active{background:var(--sky);}
+
+/* ===== PROGRESS SCREEN ===== */
+#progress{background:var(--surface);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;padding-bottom:0;}
+.stat-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;text-align:center;
+}
+.stat-num{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--navy);}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.band-chart{
+  background:white;border:1px solid var(--border);border-radius:var(--r);
+  margin:12px 16px 0;padding:16px;
+}
+.band-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;}
+.band-bars{display:flex;flex-direction:column;gap:10px;}
+.band-row{display:flex;align-items:center;gap:10px;}
+.band-label{font-size:12px;font-weight:500;color:var(--muted);width:70px;flex-shrink:0;}
+.band-bar-wrap{flex:1;background:var(--surface);border-radius:6px;height:8px;overflow:hidden;}
+.band-bar{height:100%;border-radius:6px;transition:width 1s cubic-bezier(0.4,0,0.2,1);}
+.band-score{font-size:12px;font-weight:700;color:var(--navy);width:24px;flex-shrink:0;text-align:right;}
+
+/* ===== MODAL ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(10,22,40,0.7);
+  z-index:200;display:none;align-items:flex-end;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:white;border-radius:20px 20px 0 0;
+  width:100%;max-height:80vh;overflow-y:auto;
+  padding:24px 20px;
+  padding-bottom:max(24px,env(safe-area-inset-bottom));
+  animation:slide-up 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slide-up{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-handle{
+  width:40px;height:4px;background:var(--border);border-radius:2px;
+  margin:0 auto 20px;
+}
+.modal-title{font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.modal-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:calc(var(--nav-h) + 12px);left:16px;right:16px;
+  background:var(--navy);color:white;font-size:13px;font-weight:500;
+  padding:12px 16px;border-radius:var(--r);z-index:300;
+  display:none;animation:toast-in 0.3s;
+}
+.toast.show{display:flex;align-items:center;gap:10px;}
+@keyframes toast-in{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ===== LOADING ===== */
+.ai-loading{
+  display:none;align-items:center;gap:6px;
+  font-size:12px;color:rgba(255,255,255,0.6);
+  margin-top:6px;
+}
+.ai-loading.show{display:flex;}
+.ai-load-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--accent);
+  animation:speak-pulse 0.5s ease-in-out infinite;
+}
+.ai-load-dot:nth-child(2){animation-delay:0.15s;}
+.ai-load-dot:nth-child(3){animation-delay:0.3s;}
+
+/* ===== UTILS ===== */
+.hidden{display:none!important;}
+.text-accent{color:var(--accent);}
+.text-blue{color:var(--blue);}
+.text-muted{color:var(--muted);}
+.fw7{font-weight:700;}
+.mb8{margin-bottom:8px;}
+.mb16{margin-bottom:16px;}
+</style>
+</head>
+<body>
+
+<!-- ==================== WELCOME ==================== -->
+<div class="screen active" id="welcome">
+  <div class="welcome-bg"></div>
+  <div class="welcome-top">
+    <div class="welcome-logo-wrap">
+      <img class="welcome-logo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg" alt="SpecTa Education" onerror="this.style.display='none'"/>
+    </div>
+    <div class="welcome-badge">AI Tutor Platform</div>
+    <h1 class="welcome-h1">Your Personal<br/><span>AI Exam Tutor</span><br/>Is Here.</h1>
+    <p class="welcome-sub">Interactive, speaking AI tutors for IELTS, TOEFL, SAT & GMAT. Learn anywhere, anytime — in your language.</p>
+  </div>
+  <div class="welcome-bottom">
+    <div class="welcome-tests">
+      <span class="test-chip">🇬🇧 IELTS</span>
+      <span class="test-chip">🎓 TOEFL</span>
+      <span class="test-chip">📐 SAT</span>
+      <span class="test-chip">💼 GMAT</span>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('register')">Get Started — IDR 299K / Month</button>
+    <button class="btn btn-outline" onclick="demoLogin()">Demo (Explore App)</button>
+  </div>
+</div>
+
+<!-- ==================== REGISTER ==================== -->
+<div class="screen" id="register">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('welcome')">←</button>
+    <span class="topbar-title">Create Account</span>
+  </div>
+  <div class="reg-body">
+    <p class="section-heading">Join SpecTa AI Tutor</p>
+    <p class="section-sub">Start your 30-day access today. Cancel anytime.</p>
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input class="form-input" id="reg-name" type="text" placeholder="Your name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="reg-email" type="email" placeholder="your@email.com"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Choose Your Test</label>
+      <div class="test-select-grid">
+        <div class="test-select-card selected" onclick="selectTest(this,'IELTS')">
+          <div class="emoji">🇬🇧</div><h4>IELTS</h4><p>Academic & General</p>
+        </div>
+        <div class="test-select-card" onclick="selectTest(this,'TOEFL')">
+          <div class="emoji">🎓</div><h4>TOEFL</h4><p>iBT Format</p>
+        </div>
+        <div class="test-select-card" onclick="selectTest(this,'SAT')">
+          <div class="emoji">📐</div><h4>SAT</h4><p>College Admissions</p>
+        </div>
+        <div class="test-select-card" onclick="selectTest(this,'GMAT')">
+          <div class="emoji">💼</div><h4>GMAT</h4><p>Business School</p>
+        </div>
+      </div>
+    </div>
+    <div class="price-banner">
+      <div>
+        <div class="amount">IDR 299,000</div>
+        <div class="period">per month · full access</div>
+      </div>
+      <div class="access">✓ Unlimited lessons<br/>✓ Mock tests<br/>✓ AI Tutor 24/7</div>
+    </div>
+    <button class="btn btn-primary" onclick="completeRegister()" style="margin-bottom:32px;">Proceed to Payment →</button>
+  </div>
+</div>
+
+<!-- ==================== TUTOR SELECT ==================== -->
+<div class="screen" id="tutor-select">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showScreen('register')">←</button>
+    <span class="topbar-title">Choose Your Tutor</span>
+  </div>
+  <div class="tutor-select-body">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:18px;">Your tutor will teach, speak, and guide you through every lesson. You can switch anytime.</p>
+    <div class="tutor-card-pick" onclick="pickTutor('maya',this)">
+      <div class="tutor-avatar-sm">
+        <div class="av-maya" style="transform:scale(0.65);transform-origin:top left;width:154px;height:215px;">
+          <div class="hair"></div><div class="hair-side-l"></div><div class="hair-side-r"></div>
+          <div class="head"></div><div class="eye-l"></div><div class="eye-r"></div>
+          <div class="nose"></div><div class="mouth"></div>
+          <div class="earring-l"></div><div class="earring-r"></div>
+          <div class="neck"></div><div class="collar"></div>
+          <div class="body"></div><div class="arm-l"></div><div class="arm-r"></div>
+        </div>
+      </div>
+      <div class="tutor-info">
+        <h3>Dr. Maya</h3>
+        <div class="role" style="color:var(--blue);">Academic Excellence</div>
+        <p>Methodical, thorough & patient. Detailed step-by-step explanations. Best for structured learners.</p>
+        <div class="tutor-traits-sm">
+          <span class="trait-sm" style="background:var(--sky);color:var(--blue);">Patient</span>
+          <span class="trait-sm" style="background:var(--sky);color:var(--blue);">Structured</span>
+          <span class="trait-sm" style="background:var(--sky);color:var(--blue);">Detailed</span>
+        </div>
+      </div>
+    </div>
+    <div class="tutor-card-pick" onclick="pickTutor('alex',this)">
+      <div class="tutor-avatar-sm">
+        <div class="av-alex" style="transform:scale(0.65);transform-origin:top left;width:154px;height:215px;">
+          <div class="hair"></div><div class="hair-front"></div>
+          <div class="head"></div><div class="eyebrow-l"></div><div class="eyebrow-r"></div>
+          <div class="eye-l"></div><div class="eye-r"></div>
+          <div class="nose"></div><div class="mouth"></div>
+          <div class="neck"></div><div class="body"></div><div class="shirt-stripe"></div>
+          <div class="arm-l"></div><div class="arm-r"></div>
+        </div>
+      </div>
+      <div class="tutor-info">
+        <h3>Alex</h3>
+        <div class="role" style="color:var(--coral);">Fast-Track Booster</div>
+        <p>Energetic & strategy-focused. Exam tactics, time management. Best for quick score improvement.</p>
+        <div class="tutor-traits-sm">
+          <span class="trait-sm" style="background:var(--coral-soft);color:var(--coral);">Energetic</span>
+          <span class="trait-sm" style="background:var(--coral-soft);color:var(--coral);">Strategic</span>
+          <span class="trait-sm" style="background:var(--coral-soft);color:var(--coral);">Direct</span>
+        </div>
+      </div>
+    </div>
+    <div class="tutor-card-pick" onclick="pickTutor('sari',this)">
+      <div class="tutor-avatar-sm">
+        <div class="av-sari" style="transform:scale(0.65);transform-origin:top left;width:154px;height:215px;">
+          <div class="hair"></div><div class="hair-long-l"></div><div class="hair-long-r"></div>
+          <div class="head"></div><div class="lash-l"></div><div class="lash-r"></div>
+          <div class="eye-l"></div><div class="eye-r"></div><div class="cheek-l"></div><div class="cheek-r"></div>
+          <div class="nose"></div><div class="mouth"></div>
+          <div class="neck"></div><div class="scarf"></div>
+          <div class="body"></div><div class="arm-l"></div><div class="arm-r"></div>
+        </div>
+      </div>
+      <div class="tutor-info">
+        <h3>Sari</h3>
+        <div class="role" style="color:var(--purple);">Confidence Coach</div>
+        <p>Warm, friendly & conversational. Reduces anxiety. Best for speaking confidence & casual learners.</p>
+        <div class="tutor-traits-sm">
+          <span class="trait-sm" style="background:var(--purple-soft);color:var(--purple);">Warm</span>
+          <span class="trait-sm" style="background:var(--purple-soft);color:var(--purple);">Friendly</span>
+          <span class="trait-sm" style="background:var(--purple-soft);color:var(--purple);">Supportive</span>
+        </div>
+      </div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="screen" id="dashboard">
+  <div class="scroll-body">
+    <div class="dash-hero">
+      <p class="dash-welcome">Good morning 👋</p>
+      <p class="dash-name" id="dash-name">Loading...</p>
+      <div class="dash-progress-card">
+        <div class="dash-score">
+          <div class="dash-score-num" id="dash-score">5.5</div>
+          <div class="dash-score-label">Est. Band</div>
+        </div>
+        <div class="dash-progress-info">
+          <h4>IELTS Progress — Week 1</h4>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="dash-prog-fill" style="width:12%"></div>
+          </div>
+          <div class="progress-pct" id="dash-prog-pct">12% complete · 3 of 24 lessons</div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-sections">
+      <p class="dash-section-title">IELTS Sections</p>
+      <div class="skills-grid">
+        <div class="skill-card" onclick="openLesson('reading')">
+          <div class="skill-icon">📖</div>
+          <h4>Reading</h4>
+          <p>Skimming, scanning, comprehension</p>
+          <div class="skill-progress"><div class="skill-progress-fill" style="width:20%;background:var(--blue);"></div></div>
+        </div>
+        <div class="skill-card" onclick="openLesson('writing')">
+          <div class="skill-icon">✍️</div>
+          <h4>Writing</h4>
+          <p>Task 1 graphs, Task 2 essays</p>
+          <div class="skill-progress"><div class="skill-progress-fill" style="width:8%;background:var(--teal);"></div></div>
+        </div>
+        <div class="skill-card" onclick="openLesson('listening')">
+          <div class="skill-icon">🎧</div>
+          <h4>Listening</h4>
+          <p>4 sections, note-taking skills</p>
+          <div class="skill-progress"><div class="skill-progress-fill" style="width:35%;background:var(--accent);"></div></div>
+        </div>
+        <div class="skill-card" onclick="openLesson('speaking')">
+          <div class="skill-icon">🗣️</div>
+          <h4>Speaking</h4>
+          <p>Parts 1, 2 & 3 practice</p>
+          <div class="skill-progress"><div class="skill-progress-fill" style="width:5%;background:var(--purple);"></div></div>
+        </div>
+      </div>
+      <p class="dash-section-title">Quick Actions</p>
+      <div class="quick-actions">
+        <div class="quick-btn" onclick="showNavScreen('test')">
+          <div class="icon">📝</div><p>Mock Test</p><span>10 questions</span>
+        </div>
+        <div class="quick-btn" onclick="showNavScreen('chat')">
+          <div class="icon">🤖</div><p>Ask AI Tutor</p><span>24/7 Q&amp;A</span>
+        </div>
+        <div class="quick-btn" onclick="openLesson('tips')">
+          <div class="icon">💡</div><p>Tips &amp; Tricks</p><span>Score boosters</span>
+        </div>
+        <div class="quick-btn" onclick="showNavScreen('progress')">
+          <div class="icon">📊</div><p>My Progress</p><span>View scores</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="showNavScreen('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      Home
+    </button>
+    <button class="nav-item" id="nav-lesson" onclick="openLesson('reading')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Lessons
+    </button>
+    <button class="nav-item" id="nav-test" onclick="showNavScreen('test')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Test
+    </button>
+    <button class="nav-item" id="nav-chat" onclick="showNavScreen('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      AI Chat
+    </button>
+    <button class="nav-item" id="nav-progress" onclick="showNavScreen('progress')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Progress
+    </button>
+  </nav>
+</div>
+
+<!-- ==================== LESSON ==================== -->
+<div class="screen" id="lesson">
+  <div class="topbar">
+    <button class="topbar-back" onclick="showNavScreen('dashboard')">←</button>
+    <span class="topbar-title" id="lesson-title">IELTS Reading</span>
+    <button class="topbar-action" onclick="showNavScreen('chat')">Ask AI</button>
+  </div>
+  <div class="lesson-body">
+    <!-- TUTOR STAGE -->
+    <div class="tutor-stage">
+      <div class="tutor-stage-bg"></div>
+      <!-- Avatar injected by JS -->
+      <div id="lesson-avatar-wrap" class="avatar-wrap"></div>
+      <div class="speech-bubble">
+        <div class="tutor-name" id="lesson-tutor-name">Dr. Maya</div>
+        <p id="lesson-speech">Welcome! Choose a lesson below and I'll teach you everything you need to know. Tap any topic to begin!</p>
+        <div class="ai-loading" id="lesson-loading">
+          <div class="ai-load-dot"></div><div class="ai-load-dot"></div><div class="ai-load-dot"></div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.5);">thinking...</span>
+        </div>
+        <div class="tts-controls">
+          <div class="speaking-indicator" id="speaking-indicator" style="display:none;">
+            <div class="speaking-dot"></div><div class="speaking-dot"></div><div class="speaking-dot"></div>
+          </div>
+          <button class="tts-btn" id="tts-toggle" onclick="toggleSpeech()">🔊 Speak</button>
+        </div>
+      </div>
+    </div>
+    <!-- WHITEBOARD -->
+    <div class="whiteboard" id="whiteboard">
+      <div class="wb-title">📋 Whiteboard</div>
+      <div class="wb-content" id="wb-content">
+        <em style="color:var(--muted);font-size:13px;">Your tutor will write key points here as they explain...</em>
+      </div>
+    </div>
+    <!-- LESSON TABS -->
+    <div class="lesson-tabs" id="lesson-tabs"></div>
+    <!-- LESSON CONTENT -->
+    <div class="lesson-content-area" id="lesson-content-area"></div>
+  </div>
+</div>
+
+<!-- ==================== TEST ==================== -->
+<div class="screen" id="test">
+  <div class="test-header">
+    <div class="test-info">
+      <span class="test-section-name" id="test-section-name">IELTS Reading — Section 1</span>
+      <div class="test-timer" id="test-timer">60:00</div>
+    </div>
+    <div class="test-progress-dots" id="test-dots"></div>
+  </div>
+  <div class="test-body" id="test-body"></div>
+  <div class="test-nav">
+    <button class="btn-secondary" onclick="prevQuestion()">← Back</button>
+    <button class="btn-blue" id="test-next-btn" onclick="nextQuestion()">Next →</button>
+  </div>
+  <nav class="bottom-nav" style="position:sticky;bottom:0;">
+    <button class="nav-item" onclick="showNavScreen('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Home
+    </button>
+    <button class="nav-item" onclick="openLesson('reading')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Lessons
+    </button>
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Test
+    </button>
+    <button class="nav-item" onclick="showNavScreen('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI Chat
+    </button>
+    <button class="nav-item" onclick="showNavScreen('progress')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress
+    </button>
+  </nav>
+</div>
+
+<!-- ==================== CHAT ==================== -->
+<div class="screen" id="chat">
+  <div class="topbar">
+    <span class="topbar-title" id="chat-tutor-name">Ask Dr. Maya</span>
+    <button class="topbar-action" onclick="clearChat()">Clear</button>
+  </div>
+  <div class="chat-body" id="chat-messages"></div>
+  <div class="suggest-chips" id="suggest-chips"></div>
+  <div class="chat-input-wrap">
+    <textarea class="chat-input" id="chat-input" placeholder="Ask your tutor anything..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"
+      oninput="autoResize(this)"></textarea>
+    <button class="chat-send" onclick="sendChatMsg()">➤</button>
+  </div>
+  <nav class="bottom-nav" style="position:sticky;bottom:0;">
+    <button class="nav-item" onclick="showNavScreen('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Home
+    </button>
+    <button class="nav-item" onclick="openLesson('reading')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Lessons
+    </button>
+    <button class="nav-item" onclick="showNavScreen('test')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Test
+    </button>
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI Chat
+    </button>
+    <button class="nav-item" onclick="showNavScreen('progress')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress
+    </button>
+  </nav>
+</div>
+
+<!-- ==================== PROGRESS ==================== -->
+<div class="screen" id="progress">
+  <div class="topbar"><span class="topbar-title">My Progress</span></div>
+  <div class="scroll-body">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num" id="prog-lessons">3</div><div class="stat-label">Lessons Completed</div></div>
+      <div class="stat-card"><div class="stat-num" id="prog-tests">1</div><div class="stat-label">Mock Tests Taken</div></div>
+      <div class="stat-card"><div class="stat-num" id="prog-streak">5</div><div class="stat-label">Day Streak 🔥</div></div>
+      <div class="stat-card"><div class="stat-num" id="prog-band">5.5</div><div class="stat-label">Predicted Band</div></div>
+    </div>
+    <div class="band-chart">
+      <div class="band-title">Skill Scores</div>
+      <div class="band-bars">
+        <div class="band-row"><span class="band-label">Reading</span><div class="band-bar-wrap"><div class="band-bar" id="bar-reading" style="width:0%;background:var(--blue);"></div></div><span class="band-score">6.0</span></div>
+        <div class="band-row"><span class="band-label">Writing</span><div class="band-bar-wrap"><div class="band-bar" id="bar-writing" style="width:0%;background:var(--teal);"></div></div><span class="band-score">5.0</span></div>
+        <div class="band-row"><span class="band-label">Listening</span><div class="band-bar-wrap"><div class="band-bar" id="bar-listening" style="width:0%;background:var(--accent);"></div></div><span class="band-score">6.5</span></div>
+        <div class="band-row"><span class="band-label">Speaking</span><div class="band-bar-wrap"><div class="band-bar" id="bar-speaking" style="width:0%;background:var(--purple);"></div></div><span class="band-score">5.0</span></div>
+      </div>
+    </div>
+    <div style="padding:12px 16px;">
+      <div style="background:var(--accent-soft);border:1px solid rgba(245,166,35,0.3);border-radius:var(--r);padding:16px;">
+        <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px;">📈 AI Recommendation</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;" id="ai-recommendation">Focus on Writing Task 2 — your essay structure needs improvement. Practice 1 essay per day with AI feedback to jump from Band 5.0 to 6.5 in 3 weeks.</p>
+      </div>
+    </div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="nav-item" onclick="showNavScreen('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Home
+    </button>
+    <button class="nav-item" onclick="openLesson('reading')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Lessons
+    </button>
+    <button class="nav-item" onclick="showNavScreen('test')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Test
+    </button>
+    <button class="nav-item" onclick="showNavScreen('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>AI Chat
+    </button>
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress
+    </button>
+  </nav>
+</div>
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Title</div>
+    <div class="modal-body" id="modal-body">Body</div>
+    <button class="btn btn-primary" id="modal-cta" onclick="closeModal()">Got it!</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✓</span>
+  <span id="toast-text">Message</span>
+</div>
+
+<script>
+// ==================== APP STATE ====================
+const APP = {
+  user: null,
+  tutor: 'maya',
+  test: 'IELTS',
+  currentLesson: 'reading',
+  speaking: false,
+  speechUtterance: null,
+  progress: { lessons:3, tests:1, streak:5, band:5.5 },
+  chatHistory: [],
+  testAnswers: {},
+  currentQ: 0,
+  timerInterval: null,
+  timerSecs: 3600
+};
+
+const TUTORS = {
+  maya: {
+    name:'Dr. Maya', role:'Academic Excellence',
+    color:'var(--blue)',
+    greet:'Hello! I\'m Dr. Maya, your IELTS tutor. I\'m here to guide you step by step to your target band score. What would you like to learn today?',
+    personality:'You are Dr. Maya, an expert IELTS tutor from SpecTa Education. Be methodical, thorough, patient and encouraging. Use clear step-by-step explanations. Keep responses concise for mobile (under 120 words). When explaining, describe what you\'d write on a whiteboard with [WHITEBOARD: content]. Always be supportive.'
+  },
+  alex: {
+    name:'Alex', role:'Fast-Track Booster',
+    color:'var(--coral)',
+    greet:'Hey! I\'m Alex and I\'m going to turbocharge your IELTS prep! We\'re going straight to the strategies that move the needle fast. Ready to boost that score?',
+    personality:'You are Alex, an energetic IELTS score-booster from SpecTa Education. Be direct, high-energy, strategic. Focus on exam tactics and quick wins. Keep responses punchy and concise (under 100 words). Use [WHITEBOARD: content] for key tips. Motivate the student constantly.'
+  },
+  sari: {
+    name:'Sari', role:'Confidence Coach',
+    color:'var(--purple)',
+    greet:'Hi there! I\'m Sari, and I\'m so happy you\'re here. Don\'t worry — we\'re going to tackle IELTS together at your own pace. There are no silly questions, only great ones!',
+    personality:'You are Sari, a warm friendly IELTS confidence coach from SpecTa Education. Be conversational, warm, supportive. Reduce anxiety and make learning fun. Keep responses friendly and encouraging (under 120 words). Use [WHITEBOARD: content] for visual aids. Celebrate small wins.'
+  }
+};
+
+// ==================== IELTS CONTENT ====================
+const LESSONS = {
+  reading: {
+    title:'Reading',
+    tabs:['Overview','Question Types','Strategies','Practice'],
+    content: {
+      'Overview': [
+        {title:'Introduction to IELTS Reading',desc:'Understand the test format, timing, and scoring.',badge:'Start Here',color:'var(--sky)',textColor:'var(--blue)',mins:8},
+        {title:'Academic vs General Training',desc:'Learn the key differences and what to expect.',badge:'Fundamentals',color:'var(--sky)',textColor:'var(--blue)',mins:6},
+        {title:'How Scoring Works',desc:'Band 5-9 — what each level means and how to reach it.',badge:'Essential',color:'var(--accent-soft)',textColor:'#B45309',mins:5},
+      ],
+      'Question Types': [
+        {title:'Multiple Choice Questions',desc:'Master the most common question type with 5 proven strategies.',badge:'High Yield',color:'var(--green-soft)',textColor:'var(--green)',mins:12},
+        {title:'True / False / Not Given',desc:'The question type students fear most — demystified.',badge:'Tricky',color:'var(--coral-soft)',textColor:'var(--coral)',mins:10},
+        {title:'Matching Headings',desc:'How to match paragraphs to headings quickly and accurately.',badge:'Strategy',color:'var(--sky)',textColor:'var(--blue)',mins:9},
+        {title:'Gap Fill & Short Answers',desc:'Scanning skills + grammar tips for gap fill questions.',badge:'Grammar',color:'var(--purple-soft)',textColor:'var(--purple)',mins:8},
+      ],
+      'Strategies': [
+        {title:'Skimming & Scanning Techniques',desc:'Read smarter, not harder. Cover the passage in 3 minutes.',badge:'Core Skill',color:'var(--accent-soft)',textColor:'#B45309',mins:10},
+        {title:'Keyword Mapping Method',desc:'Circle keywords, find synonyms — never waste time rereading.',badge:'Pro Tip',color:'var(--green-soft)',textColor:'var(--green)',mins:8},
+        {title:'Time Management Master Plan',desc:'60 mins, 3 passages, 40 questions — the perfect allocation.',badge:'Critical',color:'var(--coral-soft)',textColor:'var(--coral)',mins:7},
+      ],
+      'Practice': [
+        {title:'Academic Passage — Health & Science',desc:'Full practice passage with 13 questions and AI feedback.',badge:'Practice',color:'var(--sky)',textColor:'var(--blue)',mins:20},
+        {title:'Academic Passage — Technology',desc:'Challenge passage: graphs and data interpretation.',badge:'Challenge',color:'var(--purple-soft)',textColor:'var(--purple)',mins:20},
+      ]
+    }
+  },
+  writing: {
+    title:'Writing',
+    tabs:['Overview','Task 1','Task 2','Practice'],
+    content:{
+      'Overview':[
+        {title:'Writing Test Overview',desc:'Task 1 vs Task 2 — differences, timing, and what examiners look for.',badge:'Start Here',color:'var(--sky)',textColor:'var(--blue)',mins:8},
+        {title:'4 Marking Criteria Explained',desc:'Task Achievement, Coherence, Lexical Resource, Grammar — how you\'re scored.',badge:'Must Know',color:'var(--accent-soft)',textColor:'#B45309',mins:10},
+      ],
+      'Task 1':[
+        {title:'Describing Line Graphs',desc:'Language for trends, comparisons, and making an overview statement.',badge:'Charts',color:'var(--sky)',textColor:'var(--blue)',mins:12},
+        {title:'Bar Charts & Pie Charts',desc:'The exact phrases examiners want to see. Template + examples.',badge:'Template',color:'var(--green-soft)',textColor:'var(--green)',mins:10},
+        {title:'Process Diagrams',desc:'How to describe a process using sequencing language.',badge:'Special',color:'var(--purple-soft)',textColor:'var(--purple)',mins:9},
+      ],
+      'Task 2':[
+        {title:'Essay Structure Formula',desc:'The paragraph structure that guarantees a Band 6+ every time.',badge:'Essential',color:'var(--accent-soft)',textColor:'#B45309',mins:15},
+        {title:'Argument Essays',desc:'Agree/disagree — how to build a tight argument with evidence.',badge:'Most Common',color:'var(--green-soft)',textColor:'var(--green)',mins:14},
+        {title:'Discussion Essays',desc:'Both sides + your opinion — the structure that works every time.',badge:'Strategy',color:'var(--sky)',textColor:'var(--blue)',mins:12},
+        {title:'Vocabulary for High Bands',desc:'Academic vocabulary that boosts your Lexical Resource score.',badge:'Band 7+',color:'var(--coral-soft)',textColor:'var(--coral)',mins:10},
+      ],
+      'Practice':[
+        {title:'Task 1 — Graph Description',desc:'AI grades your response on all 4 criteria with tutor feedback.',badge:'Graded',color:'var(--sky)',textColor:'var(--blue)',mins:25},
+        {title:'Task 2 — Argument Essay',desc:'Full essay with AI marking and tutor explanation.',badge:'Graded',color:'var(--sky)',textColor:'var(--blue)',mins:40},
+      ]
+    }
+  },
+  listening: {
+    title:'Listening',
+    tabs:['Overview','Section Types','Skills','Practice'],
+    content:{
+      'Overview':[
+        {title:'Listening Test Format',desc:'4 sections, 40 questions, 30 minutes — what you need to know.',badge:'Start Here',color:'var(--sky)',textColor:'var(--blue)',mins:6},
+        {title:'Before You Listen',desc:'Use the preparation time to predict answers — this is crucial.',badge:'Key Strategy',color:'var(--accent-soft)',textColor:'#B45309',mins:8},
+      ],
+      'Section Types':[
+        {title:'Section 1 — Social Conversations',desc:'Filling forms, booking services. The easiest section.',badge:'Section 1',color:'var(--green-soft)',textColor:'var(--green)',mins:8},
+        {title:'Section 2 — Monologue',desc:'Single speaker giving information. Key: follow the flow.',badge:'Section 2',color:'var(--sky)',textColor:'var(--blue)',mins:8},
+        {title:'Sections 3 & 4 — Academic',desc:'Multi-speaker discussions and lectures. Hardest sections.',badge:'Sections 3-4',color:'var(--coral-soft)',textColor:'var(--coral)',mins:12},
+      ],
+      'Skills':[
+        {title:'Predicting Answers',desc:'How to use form-filling gaps to pre-guess the answer type.',badge:'Pro Skill',color:'var(--purple-soft)',textColor:'var(--purple)',mins:9},
+        {title:'Paraphrasing Traps',desc:'The answer is never said directly. Learn to match paraphrases.',badge:'Critical',color:'var(--coral-soft)',textColor:'var(--coral)',mins:10},
+        {title:'Note-Taking Speed',desc:'Symbols, abbreviations, and writing while listening.',badge:'Technique',color:'var(--sky)',textColor:'var(--blue)',mins:7},
+      ],
+      'Practice':[
+        {title:'Section 1 Practice — Hotel Booking',desc:'Real listening scenario with AI tutor feedback.',badge:'Practice',color:'var(--sky)',textColor:'var(--blue)',mins:15},
+      ]
+    }
+  },
+  speaking: {
+    title:'Speaking',
+    tabs:['Overview','Part 1','Part 2','Part 3'],
+    content:{
+      'Overview':[
+        {title:'Speaking Test Overview',desc:'11-14 minutes, 3 parts. What the examiner really scores.',badge:'Start Here',color:'var(--sky)',textColor:'var(--blue)',mins:7},
+        {title:'4 Speaking Criteria',desc:'Fluency, Vocabulary, Grammar, Pronunciation — how each is marked.',badge:'Must Know',color:'var(--accent-soft)',textColor:'#B45309',mins:9},
+        {title:'Reduce Filler Words',desc:'Stop saying "uh", "um", "like" — replace with smart pause phrases.',badge:'Quick Win',color:'var(--green-soft)',textColor:'var(--green)',mins:6},
+      ],
+      'Part 1':[
+        {title:'Part 1 — Everyday Topics',desc:'Family, hobbies, work/study. Short answers with extension.',badge:'Part 1',color:'var(--sky)',textColor:'var(--blue)',mins:10},
+        {title:'Extending Short Answers',desc:'Never give a 1-sentence answer. Use the PEEL method.',badge:'PEEL',color:'var(--green-soft)',textColor:'var(--green)',mins:8},
+      ],
+      'Part 2':[
+        {title:'Long Turn — Cue Card Method',desc:'1 minute prep, 2 minute talk. The 4-point structure.',badge:'Part 2',color:'var(--purple-soft)',textColor:'var(--purple)',mins:12},
+        {title:'40 Common Cue Card Topics',desc:'Practice the most likely topics with AI tutor feedback.',badge:'Practice',color:'var(--sky)',textColor:'var(--blue)',mins:20},
+      ],
+      'Part 3':[
+        {title:'Abstract Discussion Strategies',desc:'How to discuss opinions, problems, solutions at Band 7+ level.',badge:'Part 3',color:'var(--coral-soft)',textColor:'var(--coral)',mins:12},
+        {title:'Advanced Opinion Phrases',desc:'Replace "I think" with expressions that signal higher-band thinking.',badge:'Band 7+',color:'var(--accent-soft)',textColor:'#B45309',mins:8},
+      ]
+    }
+  },
+  tips: {
+    title:'Tips & Tricks',
+    tabs:['Score Boosters','Common Mistakes','Exam Day','Band 7+'],
+    content:{
+      'Score Boosters':[
+        {title:'The 5-Minute Reading Hack',desc:'How to get 80% correct without reading everything.',badge:'Shortcut',color:'var(--accent-soft)',textColor:'#B45309',mins:6},
+        {title:'The Essay Template That Works',desc:'A reusable structure for any Task 2 question.',badge:'Template',color:'var(--green-soft)',textColor:'var(--green)',mins:8},
+        {title:'30-Day Score Booster Plan',desc:'Daily 45-min routine that lifts your band by 0.5-1.0.',badge:'Study Plan',color:'var(--sky)',textColor:'var(--blue)',mins:10},
+      ],
+      'Common Mistakes':[
+        {title:'Top 10 Reading Mistakes',desc:'Avoid the traps that drop 40% of students from Band 7 to 6.',badge:'Warning',color:'var(--coral-soft)',textColor:'var(--coral)',mins:9},
+        {title:'Writing: What Examiners Hate',desc:'5 things in your essay that actively cost you marks.',badge:'Critical',color:'var(--coral-soft)',textColor:'var(--coral)',mins:8},
+      ],
+      'Exam Day':[
+        {title:'Night Before Checklist',desc:'What to do and not do the night before your IELTS.',badge:'Checklist',color:'var(--sky)',textColor:'var(--blue)',mins:5},
+        {title:'Test Day Strategy',desc:'From arrival to Reading — the minute-by-minute game plan.',badge:'Game Plan',color:'var(--green-soft)',textColor:'var(--green)',mins:7},
+      ],
+      'Band 7+':[
+        {title:'Vocabulary That Signals Band 7',desc:'50 words and phrases that instantly elevate your score.',badge:'Word List',color:'var(--purple-soft)',textColor:'var(--purple)',mins:12},
+        {title:'Grammar for Band 7-9',desc:'Complex sentence structures that impress examiners.',badge:'Grammar',color:'var(--purple-soft)',textColor:'var(--purple)',mins:10},
+      ]
+    }
+  }
+};
+
+// ==================== MOCK TEST QUESTIONS ====================
+const TEST_QUESTIONS = [
+  {num:1,section:'Reading',context:'The global demand for clean energy has accelerated dramatically in recent decades. Solar power, once considered economically unviable, now represents the fastest-growing source of electricity worldwide, with installation costs falling by over 89% since 2010.',
+   q:'According to the passage, what has happened to solar power installation costs since 2010?',
+   options:['They have increased significantly','They have fallen by over 89%','They have remained stable','They have doubled'],
+   correct:1,
+   explanation:'The passage clearly states installation costs have fallen by over 89% since 2010. Keywords: "installation costs falling by over 89% since 2010."'
+  },
+  {num:2,section:'Reading',context:'',
+   q:'The word "unviable" in the passage is closest in meaning to:',
+   options:['Highly profitable','Not practical or feasible','Widely popular','Environmentally harmful'],
+   correct:1,
+   explanation:'"Unviable" means "not viable" — not capable of working or succeeding. The context confirms this: solar power was once considered economically not feasible.'
+  },
+  {num:3,section:'Grammar',context:'',
+   q:'Choose the correct sentence:',
+   options:['Despite to study hard, she failed the exam.','Despite studying hard, she failed the exam.','Despite she studied hard, she failed the exam.','Despite of studying hard, she failed the exam.'],
+   correct:1,
+   explanation:'"Despite" is followed by a noun or gerund (-ing form), NOT a clause. Correct: "Despite + studying (gerund)". Never use "Despite to" or "Despite of".'
+  },
+  {num:4,section:'Vocabulary',context:'',
+   q:'In IELTS Writing, which word is the most academically appropriate synonym for "show"?',
+   options:['Demonstrate','Prove right','Make clear','Tell about'],
+   correct:0,
+   explanation:'"Demonstrate" is the most academic choice. Alternatives: "illustrate", "indicate", "reveal", "suggest". Avoid informal words like "show" in academic writing.'
+  },
+  {num:5,section:'Grammar',context:'',
+   q:'Complete the sentence: "The number of students ___ increased dramatically over the past decade."',
+   options:['have','has','had','were'],
+   correct:1,
+   explanation:'"The number of" is SINGULAR and takes a singular verb ("has"). Compare: "A number of students HAVE increased their scores" — "a number of" is plural. This is a very common IELTS Grammar trap!'
+  },
+  {num:6,section:'Reading',context:'Biodiversity loss is occurring at an unprecedented rate. Scientists estimate that species are now becoming extinct at 1,000 times the natural background rate. This sixth mass extinction, unlike previous ones, is primarily driven by human activity including habitat destruction, pollution and climate change.',
+   q:'According to the passage, how does the current extinction rate compare to the natural background rate?',
+   options:['It is 100 times higher','It is 500 times higher','It is 1,000 times higher','It is 10,000 times higher'],
+   correct:2,
+   explanation:'The passage states species are becoming extinct at "1,000 times the natural background rate." Always read the numbers carefully — IELTS often provides similar options to trick you.'
+  },
+  {num:7,section:'Reading',context:'',
+   q:'The author\'s claim that this is the "sixth mass extinction" implies:',
+   options:['This is the first time humans have caused extinctions','There have been five previous mass extinctions in Earth\'s history','Scientists have listed six types of extinction','The previous five extinctions were also caused by humans'],
+   correct:1,
+   explanation:'"Sixth" implies there have been five previous mass extinctions. This is an inference question — the answer is implied, not stated directly. This is key IELTS strategy: look for what is logically implied.'
+  },
+  {num:8,section:'Writing',context:'',
+   q:'For IELTS Writing Task 2, which sentence is the best thesis statement for an essay on "whether technology has improved or harmed communication"?',
+   options:['Technology is very important in modern society and communication.','While technology has undeniably enhanced the speed and reach of communication, it has simultaneously diminished the quality of human connection.','I think technology has both good and bad effects.','In this essay, I will discuss technology and communication.'],
+   correct:1,
+   explanation:'A strong thesis: (1) takes a clear position, (2) uses academic vocabulary, (3) acknowledges both sides. Option B does all three. Options C and D are too vague. Option A makes no clear argument.'
+  },
+  {num:9,section:'Speaking',context:'',
+   q:'A student says: "I like my city because it has many... er... you know... things to do." Which response would score higher?',
+   options:['I enjoy living in my city primarily because it offers a diverse range of leisure and cultural activities.','My city is good because it has many activities and places.','I like my city. There are many things. Many activities. It is enjoyable.','My city is very nice and I like it a lot because there are things.'],
+   correct:0,
+   explanation:'Option A scores highest because: (1) Uses academic vocabulary ("primarily", "diverse range", "leisure and cultural"), (2) Complete complex sentence, (3) No fillers. IELTS Speaking rewards precise vocabulary and fluency.'
+  },
+  {num:10,section:'Listening',context:'',
+   q:'In IELTS Listening, you hear: "The conference has been rescheduled from Thursday to the following Monday." The form asks: "Conference date: ___". What do you write?',
+   options:['Thursday','Following Monday','Monday','The date wasn\'t given'],
+   correct:2,
+   explanation:'"Following Monday" — but on a form, you write simply "Monday". IELTS Listening tests note-taking, not exact repetition. Also: "rescheduled FROM Thursday" means Thursday is WRONG. Always listen for changes!'
+  }
+];
+
+// ==================== SCREEN MANAGEMENT ====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+function showNavScreen(id) {
+  showScreen(id);
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navId = 'nav-' + (id === 'dashboard' ? 'home' : id === 'test' ? 'test' : id === 'chat' ? 'chat' : id === 'progress' ? 'progress' : '');
+  const navEl = document.getElementById(navId);
+  if(navEl) navEl.classList.add('active');
+  if(id === 'progress') animateBars();
+  if(id === 'chat') initChat();
+  if(id === 'test') initTest();
+}
+
+// ==================== AUTH ====================
+function selectTest(el, test) {
+  document.querySelectorAll('.test-select-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  APP.test = test;
+}
+function completeRegister() {
+  const name = document.getElementById('reg-name').value.trim() || 'Student';
+  const email = document.getElementById('reg-email').value.trim();
+  APP.user = { name, email };
+  saveToStorage();
+  showScreen('tutor-select');
+}
+function demoLogin() {
+  APP.user = { name: 'Demo Student', email: 'demo@specta.com' };
+  APP.tutor = 'maya';
+  saveToStorage();
+  initDashboard();
+  showNavScreen('dashboard');
+}
+function pickTutor(t, el) {
+  document.querySelectorAll('.tutor-card-pick').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  APP.tutor = t;
+  setTimeout(() => {
+    saveToStorage();
+    initDashboard();
+    showNavScreen('dashboard');
+    showToast('✓ ' + TUTORS[t].name + ' is ready to teach you!');
+  }, 300);
+}
+
+// ==================== DASHBOARD ====================
+function initDashboard() {
+  const name = (APP.user?.name || 'Student').split(' ')[0];
+  document.getElementById('dash-name').textContent = name + '\'s IELTS Dashboard';
+  loadProgress();
+}
+
+// ==================== AVATAR HTML ====================
+function getAvatarHTML(tutor, large=false) {
+  const scale = large ? 1 : 0.9;
+  const w = Math.round(100 * scale);
+  const h = Math.round(140 * scale);
+  const parts = {
+    maya: `<div class="av-maya" id="lesson-avatar" style="transform:scale(${scale});transform-origin:bottom center;width:${100/scale}px;height:${140/scale}px;">
+      <div class="hair"></div><div class="hair-side-l"></div><div class="hair-side-r"></div>
+      <div class="head"></div><div class="eye-l"></div><div class="eye-r"></div>
+      <div class="nose"></div><div class="mouth" id="av-mouth"></div>
+      <div class="earring-l"></div><div class="earring-r"></div>
+      <div class="neck"></div><div class="collar"></div>
+      <div class="body"></div><div class="arm-l"></div><div class="arm-r"></div>
+    </div>`,
+    alex: `<div class="av-alex" id="lesson-avatar" style="transform:scale(${scale});transform-origin:bottom center;width:${100/scale}px;height:${140/scale}px;">
+      <div class="hair"></div><div class="hair-front"></div>
+      <div class="head"></div><div class="eyebrow-l"></div><div class="eyebrow-r"></div>
+      <div class="eye-l"></div><div class="eye-r"></div>
+      <div class="nose"></div><div class="mouth" id="av-mouth"></div>
+      <div class="neck"></div><div class="body"></div><div class="shirt-stripe"></div>
+      <div class="arm-l"></div><div class="arm-r"></div>
+    </div>`,
+    sari: `<div class="av-sari" id="lesson-avatar" style="transform:scale(${scale});transform-origin:bottom center;width:${100/scale}px;height:${140/scale}px;">
+      <div class="hair"></div><div class="hair-long-l"></div><div class="hair-long-r"></div>
+      <div class="head"></div><div class="lash-l"></div><div class="lash-r"></div>
+      <div class="eye-l"></div><div class="eye-r"></div><div class="cheek-l"></div><div class="cheek-r"></div>
+      <div class="nose"></div><div class="mouth" id="av-mouth"></div>
+      <div class="neck"></div><div class="scarf"></div>
+      <div class="body"></div><div class="arm-l"></div><div class="arm-r"></div>
+    </div>`
+  };
+  return `<div class="avatar-body-anim">${parts[tutor] || parts.maya}</div>`;
+}
+
+// ==================== LESSON SCREEN ====================
+function openLesson(section) {
+  APP.currentLesson = section;
+  const t = TUTORS[APP.tutor];
+  const lessonData = LESSONS[section] || LESSONS.reading;
+
+  document.getElementById('lesson-title').textContent = 'IELTS ' + lessonData.title;
+  document.getElementById('lesson-tutor-name').textContent = t.name;
+  document.getElementById('lesson-avatar-wrap').innerHTML = getAvatarHTML(APP.tutor);
+
+  // Build tabs
+  const tabsEl = document.getElementById('lesson-tabs');
+  tabsEl.innerHTML = lessonData.tabs.map((tab,i) =>
+    `<button class="lesson-tab ${i===0?'active':''}" onclick="switchLessonTab('${tab}',this)">${tab}</button>`
+  ).join('');
+
+  // Show first tab content
+  renderLessonContent(lessonData.tabs[0], section);
+
+  // Greet with first lesson message
+  const greet = t.greet;
+  document.getElementById('lesson-speech').textContent = greet;
+  clearWhiteboard();
+
+  showScreen('lesson');
+  document.getElementById('nav-lesson')?.classList.remove('active');
+
+  // Auto-speak greeting
+  setTimeout(() => tutorSpeak(greet, false), 400);
+}
+
+function switchLessonTab(tab, el) {
+  document.querySelectorAll('.lesson-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderLessonContent(tab, APP.currentLesson);
+}
+
+function renderLessonContent(tab, section) {
+  const lessonData = LESSONS[section];
+  const cards = lessonData.content[tab] || [];
+  const area = document.getElementById('lesson-content-area');
+  area.innerHTML = cards.map(c => `
+    <div class="lesson-card" onclick="startTopic('${c.title.replace(/'/g,"\\'")}','${section}')">
+      <h4>${c.title}</h4>
+      <p>${c.desc}</p>
+      <div class="lesson-card-meta">
+        <span class="lesson-badge" style="background:${c.color};color:${c.textColor};">${c.badge}</span>
+        <span class="lesson-duration">⏱ ${c.mins} min</span>
+      </div>
+    </div>`).join('');
+}
+
+function startTopic(title, section) {
+  const t = TUTORS[APP.tutor];
+  document.getElementById('lesson-loading').classList.add('show');
+  document.getElementById('lesson-speech').textContent = '';
+  stopSpeech();
+
+  // Set avatar to thinking
+  const av = document.getElementById('lesson-avatar');
+  if(av) av.parentElement.parentElement.classList.add('avatar-thinking');
+
+  // Call AI
+  callAI(`I'm a student studying for IELTS. Please teach me about: "${title}" for IELTS ${section}. Start teaching immediately. Include [WHITEBOARD: key_content] to show what you'd write on the board.`, section)
+    .then(resp => {
+      document.getElementById('lesson-loading').classList.remove('show');
+      if(av) av.parentElement.parentElement.classList.remove('avatar-thinking');
+
+      // Extract whiteboard content
+      const wbMatch = resp.match(/\[WHITEBOARD:\s*([^\]]+)\]/i);
+      const cleanResp = resp.replace(/\[WHITEBOARD:[^\]]*\]/gi, '').trim();
+
+      document.getElementById('lesson-speech').textContent = cleanResp;
+      if(wbMatch) writeToBoard(title, wbMatch[1]);
+      else writeToBoard(title, title + '\n\n' + cleanResp.substring(0,200));
+
+      tutorSpeak(cleanResp, true);
+      updateProgress(1);
+    })
+    .catch(e => {
+      document.getElementById('lesson-loading').classList.remove('show');
+      if(av) av.parentElement.parentElement.classList.remove('avatar-thinking');
+      const fallback = getFallbackLesson(title);
+      document.getElementById('lesson-speech').textContent = fallback;
+      writeToBoard(title, fallback.substring(0,300));
+      tutorSpeak(fallback, true);
+    });
+}
+
+function getFallbackLesson(title) {
+  const t = TUTORS[APP.tutor];
+  const lessons = {
+    'Multiple Choice Questions': `Let me explain Multiple Choice Questions! There are 5 key rules. Rule 1: Read the question BEFORE reading the passage. Rule 2: Identify keywords in the question. Rule 3: Scan for those keywords — don't read everything! Rule 4: Eliminate obviously wrong answers first. Rule 5: Watch for paraphrasing — the correct answer is never word-for-word from the text. Always check back to the passage to confirm!`,
+    'True / False / Not Given': `True/False/Not Given is tricky but manageable! TRUE means the statement agrees with the passage. FALSE means it contradicts the passage. NOT GIVEN means the information simply isn't there. The key rule: Never use your own knowledge — ONLY what's in the passage. If you can't find it — it's NOT GIVEN. Never confuse FALSE and NOT GIVEN!`,
+    'Essay Structure Formula': `The perfect IELTS Task 2 structure: Paragraph 1: Introduction — paraphrase the question + state your position. Paragraph 2: First main point + example + explanation. Paragraph 3: Second main point + example + explanation. Paragraph 4 (optional): Counter-argument. Conclusion: Summarise + restate your position. Each paragraph should be 5-8 sentences. Aim for 280-320 words total.`,
+  };
+  return lessons[title] || `Welcome to "${title}"! This is a crucial IELTS topic. Let me walk you through everything you need to know step by step. I'll start with the fundamentals and build up to the advanced strategies that will boost your band score. Are you ready? Let's begin!`;
+}
+
+// ==================== WHITEBOARD ====================
+function clearWhiteboard() {
+  document.getElementById('wb-content').innerHTML = '<em style="color:var(--muted);font-size:13px;">Your tutor will write key points here as they explain...</em>';
+}
+
+async function writeToBoard(title, content) {
+  const wb = document.getElementById('wb-content');
+  wb.innerHTML = '';
+
+  // Title
+  const titleEl = document.createElement('div');
+  titleEl.innerHTML = `<strong style="color:var(--navy);font-family:'Sora',sans-serif;font-size:14px;display:block;margin-bottom:8px;">📌 ${title}</strong>`;
+  wb.appendChild(titleEl);
+
+  // Parse content into points
+  const lines = content.split(/[.\n]/).map(s=>s.trim()).filter(s=>s.length > 8).slice(0,5);
+  for(let i=0; i<lines.length; i++) {
+    await delay(600 + i*400);
+    const step = document.createElement('div');
+    step.className = 'wb-step';
+    step.innerHTML = `<span class="wb-step-num">${i+1}</span><span>${lines[i]}</span>`;
+    step.style.opacity = '0';
+    wb.appendChild(step);
+    await delay(50);
+    step.style.transition = 'opacity 0.4s';
+    step.style.opacity = '1';
+  }
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ==================== TTS ====================
+function tutorSpeak(text, auto=true) {
+  if(!auto) return;
+  if(!('speechSynthesis' in window)) return;
+  stopSpeech();
+  const utter = new SpeechSynthesisUtterance(text.replace(/[📌📖✍️🎧🗣️]/g,''));
+  utter.rate = 0.9;
+  utter.pitch = APP.tutor === 'maya' ? 1.1 : APP.tutor === 'sari' ? 1.2 : 0.95;
+  utter.volume = 1;
+  utter.lang = 'en-US';
+
+  utter.onstart = () => {
+    APP.speaking = true;
+    document.getElementById('speaking-indicator').style.display = 'flex';
+    document.getElementById('tts-toggle').textContent = '⏸ Pause';
+    const av = document.getElementById('lesson-avatar');
+    if(av) av.closest('.avatar-body-anim')?.classList.add('avatar-talking');
+  };
+  utter.onend = utter.onerror = () => {
+    APP.speaking = false;
+    document.getElementById('speaking-indicator').style.display = 'none';
+    document.getElementById('tts-toggle').textContent = '🔊 Speak';
+    const av = document.getElementById('lesson-avatar');
+    if(av) av.closest('.avatar-body-anim')?.classList.remove('avatar-talking');
+  };
+
+  APP.speechUtterance = utter;
+  speechSynthesis.speak(utter);
+}
+
+function stopSpeech() {
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  APP.speaking = false;
+  document.getElementById('speaking-indicator').style.display = 'none';
+  const btn = document.getElementById('tts-toggle');
+  if(btn) btn.textContent = '🔊 Speak';
+  const av = document.getElementById('lesson-avatar');
+  if(av) av.closest('.avatar-body-anim')?.classList.remove('avatar-talking');
+}
+
+function toggleSpeech() {
+  if(APP.speaking) {
+    stopSpeech();
+  } else {
+    const text = document.getElementById('lesson-speech').textContent;
+    if(text) tutorSpeak(text, true);
+  }
+}
+
+// ==================== AI CALLS ====================
+async function callAI(userMsg, context='') {
+  const t = TUTORS[APP.tutor];
+  const systemPrompt = t.personality + '\nContext: Student is studying IELTS ' + (context||'') + '. Keep response under 120 words. Be encouraging. If relevant, add [WHITEBOARD: point1. point2. point3] to show what you\'d write.';
+
+  // Build messages array
+  const messages = [{ role:'user', content: userMsg }];
+
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        system: systemPrompt,
+        messages
+      })
+    });
+    if(!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    return data.content?.[0]?.text || 'Let me think about that...';
+  } catch(e) {
+    throw e;
+  }
+}
+
+// ==================== CHAT ====================
+const SUGGEST_QUESTIONS = {
+  reading: ['How do I do True/False/Not Given?','Tips for skimming?','How to manage time in Reading?','What is TNFG strategy?'],
+  writing: ['How to structure Task 2 essay?','What score does my writing get?','Band 7 vocabulary examples?','Task 1 graph phrases?'],
+  listening: ['How to predict answers?','What are common traps?','How to handle Section 4?','Note-taking symbols?'],
+  speaking: ['How to extend my answers?','Part 2 cue card tips?','How to sound more fluent?','Reduce my accent?'],
+  default: ['What is my weakest area?','How long to prepare for Band 7?','How does IELTS scoring work?','Tips for exam day?']
+};
+
+function initChat() {
+  const t = TUTORS[APP.tutor];
+  document.getElementById('chat-tutor-name').textContent = 'Ask ' + t.name;
+
+  // Suggest chips
+  const chips = SUGGEST_QUESTIONS[APP.currentLesson] || SUGGEST_QUESTIONS.default;
+  document.getElementById('suggest-chips').innerHTML = chips.map(q =>
+    `<div class="suggest-chip" onclick="sendSuggest('${q}')">${q}</div>`
+  ).join('');
+
+  // Init with greeting if empty
+  if(document.getElementById('chat-messages').children.length === 0) {
+    appendChatMsg('ai', t.greet);
+  }
+}
+
+function sendSuggest(q) {
+  document.getElementById('chat-input').value = q;
+  sendChatMsg();
+}
+
+async function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  autoResize(input);
+
+  appendChatMsg('user', msg);
+  APP.chatHistory.push({role:'user', content:msg});
+
+  // Show typing
+  const typingEl = document.createElement('div');
+  typingEl.className = 'chat-typing';
+  typingEl.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  typingEl.id = 'typing-indicator';
+  document.getElementById('chat-messages').appendChild(typingEl);
+  scrollChat();
+
+  try {
+    const resp = await callAI(msg, APP.currentLesson);
+    document.getElementById('typing-indicator')?.remove();
+    const cleanResp = resp.replace(/\[WHITEBOARD:[^\]]*\]/gi,'').trim();
+    appendChatMsg('ai', cleanResp);
+    APP.chatHistory.push({role:'assistant', content:cleanResp});
+  } catch(e) {
+    document.getElementById('typing-indicator')?.remove();
+    appendChatMsg('ai', `I'm having a little trouble connecting right now. Let me give you a tip directly: For IELTS ${APP.currentLesson}, always focus on paraphrasing — the correct answer is rarely the exact words from the text. What else can I help you with?`);
+  }
+}
+
+function appendChatMsg(role, text) {
+  const t = TUTORS[APP.tutor];
+  const el = document.createElement('div');
+  el.className = `msg ${role}`;
+  if(role==='ai') {
+    el.innerHTML = `
+      <div class="msg-avatar" style="background:${t.color};">${t.name[0]}</div>
+      <div><div class="msg-name">${t.name}</div><div class="msg-bubble">${text}</div></div>`;
+  } else {
+    const initials = (APP.user?.name||'You').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    el.innerHTML = `
+      <div class="msg-avatar" style="background:var(--navy);">${initials}</div>
+      <div><div class="msg-name" style="text-align:right;">${APP.user?.name||'You'}</div><div class="msg-bubble">${text}</div></div>`;
+  }
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+}
+
+function scrollChat() {
+  const body = document.getElementById('chat-messages');
+  setTimeout(() => body.scrollTop = body.scrollHeight, 100);
+}
+
+function clearChat() {
+  document.getElementById('chat-messages').innerHTML = '';
+  APP.chatHistory = [];
+  initChat();
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+// ==================== MOCK TEST ====================
+function initTest() {
+  APP.currentQ = 0;
+  APP.testAnswers = {};
+  APP.timerSecs = 3600;
+  renderQuestion(0);
+  renderDots();
+  startTimer();
+}
+
+function renderQuestion(idx) {
+  const q = TEST_QUESTIONS[idx];
+  if(!q) { showResults(); return; }
+
+  document.getElementById('test-section-name').textContent = 'IELTS ' + q.section + ' — Q' + q.num + ' of ' + TEST_QUESTIONS.length;
+  document.getElementById('test-next-btn').textContent = idx < TEST_QUESTIONS.length-1 ? 'Next →' : 'Finish ✓';
+
+  let html = `<div class="question-num">Question ${q.num} of ${TEST_QUESTIONS.length} · ${q.section}</div>`;
+  if(q.context) html += `<div class="question-context">"${q.context}"</div>`;
+  html += `<div class="question-text">${q.q}</div>`;
+  html += `<div class="options-list">${q.options.map((o,i) =>
+    `<button class="option-btn" id="opt-${idx}-${i}" onclick="selectOption(${idx},${i})"
+      ><span class="option-letter">${String.fromCharCode(65+i)}</span>${o}</button>`
+  ).join('')}</div>`;
+  html += `<div class="ai-explanation" id="exp-${idx}">
+    <div class="ai-label">🤖 ${TUTORS[APP.tutor].name} explains:</div>
+    <p>${q.explanation}</p>
+  </div>`;
+
+  document.getElementById('test-body').innerHTML = html;
+  document.getElementById('test-body').scrollTop = 0;
+
+  // Restore selection if already answered
+  if(APP.testAnswers[idx] !== undefined) {
+    const sel = APP.testAnswers[idx];
+    document.getElementById(`opt-${idx}-${sel}`)?.classList.add('selected');
+    showExplanation(idx, sel, q.correct);
+  }
+}
+
+function selectOption(qIdx, optIdx) {
+  if(APP.testAnswers[qIdx] !== undefined) return; // Can't change
+  APP.testAnswers[qIdx] = optIdx;
+  const q = TEST_QUESTIONS[qIdx];
+
+  // Style options
+  q.options.forEach((_,i) => {
+    const btn = document.getElementById(`opt-${qIdx}-${i}`);
+    if(!btn) return;
+    if(i === q.correct) btn.classList.add('correct');
+    else if(i === optIdx) btn.classList.add('wrong');
+    btn.querySelector('.option-letter').textContent = i === q.correct ? '✓' : i === optIdx ? '✗' : String.fromCharCode(65+i);
+  });
+
+  showExplanation(qIdx, optIdx, q.correct);
+  renderDots();
+}
+
+function showExplanation(qIdx, sel, correct) {
+  const exp = document.getElementById(`exp-${qIdx}`);
+  if(exp) exp.classList.add('show');
+}
+
+function prevQuestion() {
+  if(APP.currentQ > 0) { APP.currentQ--; renderQuestion(APP.currentQ); renderDots(); }
+}
+function nextQuestion() {
+  if(APP.currentQ < TEST_QUESTIONS.length-1) { APP.currentQ++; renderQuestion(APP.currentQ); renderDots(); }
+  else showResults();
+}
+
+function renderDots() {
+  document.getElementById('test-dots').innerHTML = TEST_QUESTIONS.map((_,i) => {
+    let cls = 'test-dot';
+    if(i === APP.currentQ) cls += ' current';
+    else if(APP.testAnswers[i] !== undefined) cls += ' answered';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function startTimer() {
+  if(APP.timerInterval) clearInterval(APP.timerInterval);
+  APP.timerInterval = setInterval(() => {
+    APP.timerSecs--;
+    const m = Math.floor(APP.timerSecs/60);
+    const s = APP.timerSecs%60;
+    const el = document.getElementById('test-timer');
+    if(el) el.textContent = m + ':' + String(s).padStart(2,'0');
+    if(APP.timerSecs <= 0) { clearInterval(APP.timerInterval); showResults(); }
+  }, 1000);
+}
+
+function showResults() {
+  clearInterval(APP.timerInterval);
+  const answered = Object.keys(APP.testAnswers).length;
+  const correct = Object.entries(APP.testAnswers).filter(([i,a]) => TEST_QUESTIONS[i]?.correct === a).length;
+  const pct = Math.round((correct/TEST_QUESTIONS.length)*100);
+  const band = pct >= 90 ? 8.0 : pct >= 75 ? 7.0 : pct >= 60 ? 6.0 : pct >= 45 ? 5.5 : 5.0;
+
+  showModal(
+    '🏆 Test Complete!',
+    `You scored <strong>${correct}/${TEST_QUESTIONS.length}</strong> correct (${pct}%).<br/><br/>
+    <strong>Estimated IELTS Band: ${band}</strong><br/><br/>
+    ${pct >= 70 ? '🎉 Great work! Keep practising to push even higher.' : '💪 Good effort! Review the explanations and try again tomorrow.'}<br/><br/>
+    Your tutor has reviewed your mistakes. Head to the <strong>Lessons</strong> tab to strengthen your weak areas.`,
+    'Review Lessons'
+  );
+
+  APP.progress.tests++;
+  saveToStorage();
+}
+
+// ==================== PROGRESS ====================
+function loadProgress() {
+  const saved = localStorage.getItem('specta_progress');
+  if(saved) Object.assign(APP.progress, JSON.parse(saved));
+  document.getElementById('prog-lessons').textContent = APP.progress.lessons;
+  document.getElementById('prog-tests').textContent = APP.progress.tests;
+  document.getElementById('prog-streak').textContent = APP.progress.streak;
+  document.getElementById('prog-band').textContent = APP.progress.band;
+}
+
+function updateProgress(lessonsAdded=0) {
+  APP.progress.lessons += lessonsAdded;
+  saveToStorage();
+  const pct = Math.min(100, Math.round((APP.progress.lessons / 24) * 100));
+  const fill = document.getElementById('dash-prog-fill');
+  const pctEl = document.getElementById('dash-prog-pct');
+  if(fill) fill.style.width = pct + '%';
+  if(pctEl) pctEl.textContent = pct + '% complete · ' + APP.progress.lessons + ' of 24 lessons';
+}
+
+function animateBars() {
+  setTimeout(() => {
+    document.getElementById('bar-reading').style.width = '67%';
+    document.getElementById('bar-writing').style.width = '56%';
+    document.getElementById('bar-listening').style.width = '72%';
+    document.getElementById('bar-speaking').style.width = '56%';
+  }, 200);
+}
+
+// ==================== MODAL / TOAST ====================
+function showModal(title, body, cta='Got it!') {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-cta').textContent = cta;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function showToast(msg, icon='✓') {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-text').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ==================== STORAGE ====================
+function saveToStorage() {
+  localStorage.setItem('specta_user', JSON.stringify(APP.user));
+  localStorage.setItem('specta_tutor', APP.tutor);
+  localStorage.setItem('specta_test', APP.test);
+  localStorage.setItem('specta_progress', JSON.stringify(APP.progress));
+}
+function loadFromStorage() {
+  const u = localStorage.getItem('specta_user');
+  if(u) APP.user = JSON.parse(u);
+  APP.tutor = localStorage.getItem('specta_tutor') || 'maya';
+  APP.test = localStorage.getItem('specta_test') || 'IELTS';
+  const p = localStorage.getItem('specta_progress');
+  if(p) APP.progress = JSON.parse(p);
+}
+
+// ==================== PWA MANIFEST ====================
+function registerPWA() {
+  const manifest = {
+    name:'SpecTa AI Tutor',
+    short_name:'SpecTa Tutor',
+    description:'AI-powered IELTS, TOEFL, SAT & GMAT tutor',
+    start_url:'/',
+    display:'standalone',
+    background_color:'#0A1628',
+    theme_color:'#0A1628',
+    orientation:'portrait',
+    icons:[{src:'https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg',sizes:'192x192',type:'image/jpeg'},{src:'https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg',sizes:'512x512',type:'image/jpeg'}]
+  };
+  const blob = new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('manifest-link').setAttribute('href',url);
+
+  if('serviceWorker' in navigator) {
+    // Inline service worker
+    const swContent = `
+self.addEventListener('install',e=>e.waitUntil(caches.open('specta-v1').then(c=>c.addAll(['/']))));
+self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+    `;
+    const swBlob = new Blob([swContent],{type:'application/javascript'});
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  }
+}
+
+// ==================== INIT ====================
+window.addEventListener('DOMContentLoaded', () => {
+  registerPWA();
+  loadFromStorage();
+
+  // If returning user, skip to dashboard
+  if(APP.user && APP.tutor) {
+    initDashboard();
+    showNavScreen('dashboard');
+  }
+});
+</script>
+</body>
+</html>

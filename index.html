@@ -5,73 +5,60 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
 <meta name="theme-color" content="#0A1628"/>
 <title>SpecTa AI Tutor</title>
-<script src="lessons.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--navy:#0A1628;--blue:#1A4FA0;--sky:#E8F1FB;--accent:#F5A623;--green:#16A34A;--coral:#E55A4E;--purple:#7C3AED;--border:#D4E0F2;--muted:#5A6B8A;--surface:#F4F7FC;--nav:60px;}
+:root{--navy:#0A1628;--blue:#1A4FA0;--sky:#E8F1FB;--accent:#F5A623;--green:#16A34A;--coral:#E55A4E;--purple:#7C3AED;--teal:#00B4A6;--border:#D4E0F2;--muted:#5A6B8A;--surface:#F4F7FC;--nav:60px;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;font-size:15px;color:#0A1628;background:var(--surface);}
 button{font-family:inherit;cursor:pointer;border:none;background:none;}
+textarea,input{font-family:inherit;}
 .screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;}
 .screen.active{display:flex;}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav)+8px);}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav) + 8px);}
 .scroll::-webkit-scrollbar{display:none;}
-
-/* TOPBAR */
-.tb{background:var(--navy);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;padding-top:max(12px,env(safe-area-inset-top));}
-.tb-t{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:#fff;flex:1;}
-.tb-b{color:rgba(255,255,255,.8);font-size:22px;padding:2px 10px 2px 0;line-height:1;}
-
-/* BOTTOM NAV */
+.topbar{background:var(--navy);padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;padding-top:max(14px,env(safe-area-inset-top));}
+.topbar-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:#fff;flex:1;}
+.topbar-back{color:rgba(255,255,255,.8);font-size:22px;padding:2px 12px 2px 0;line-height:1;}
 .bnav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:#fff;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
-.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:500;color:#8FA0BC;}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;font-weight:500;color:#8FA0BC;cursor:pointer;}
 .bn.on{color:var(--blue);}
 .bn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;}
-
-/* BUTTONS */
-.btn{display:block;width:100%;padding:15px;border-radius:12px;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;text-align:center;cursor:pointer;}
+.btn{display:block;width:100%;padding:15px;border-radius:12px;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;text-align:center;cursor:pointer;border:none;}
 .btn-gold{background:var(--accent);color:var(--navy);}
 .btn-blue{background:var(--blue);color:#fff;}
-.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25);}
-
-/* WELCOME */
 #welcome{background:var(--navy);}
 .wbg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 10%,rgba(74,144,226,.3),transparent 55%),radial-gradient(ellipse at 10% 90%,rgba(245,166,35,.12),transparent 50%);pointer-events:none;}
-.win{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:max(48px,env(safe-area-inset-top)) 24px 36px;}
-.wlogo{height:34px;filter:brightness(0) invert(1);margin-bottom:32px;object-fit:contain;}
-.wtag{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:12px;}
-.wh1{font-family:'Sora',sans-serif;font-size:clamp(26px,8vw,40px);font-weight:800;color:#fff;line-height:1.12;margin-bottom:12px;}
+.win{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:max(52px,env(safe-area-inset-top)) 24px 40px;}
+.wlogo{height:34px;filter:brightness(0) invert(1);margin-bottom:36px;object-fit:contain;}
+.wtag{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:14px;}
+.wh1{font-family:'Sora',sans-serif;font-size:clamp(26px,8vw,42px);font-weight:800;color:#fff;line-height:1.12;margin-bottom:12px;}
 .wh1 span{color:var(--accent);}
 .wsub{font-size:14px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:auto;}
-.wchips{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 18px;}
-.wchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;}
-
-/* TUTOR SELECT */
-.tcard{background:#fff;border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;display:flex;gap:14px;align-items:center;}
+.wchips{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 20px;}
+.wchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;}
+.tcard{background:#fff;border:2.5px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;display:flex;gap:14px;align-items:center;}
 .tcard.on{border-color:var(--blue);}
-.tav{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.tav{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
 .tc-name{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:2px;}
-.tc-role{font-size:11px;font-weight:600;margin-bottom:4px;}
+.tc-role{font-size:11px;font-weight:700;margin-bottom:4px;}
 .tc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
-
-/* DASHBOARD */
 .hero{background:var(--navy);padding:18px 16px 20px;}
 .hero-g{font-size:12px;color:rgba(255,255,255,.5);}
 .hero-n{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:14px;}
 .hero-c{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px;display:flex;gap:14px;align-items:center;}
 .hero-b{background:rgba(245,166,35,.2);border-radius:10px;padding:8px 14px;text-align:center;flex-shrink:0;}
-.hbn{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--accent);}
+.hbn{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--accent);}
 .hbl{font-size:10px;color:rgba(255,255,255,.5);}
 .hprog{flex:1;}
-.hprog h4{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;}
+.hprog h4{font-size:12px;font-weight:600;color:#fff;margin-bottom:5px;}
 .pbar{background:rgba(255,255,255,.15);border-radius:6px;height:6px;overflow:hidden;}
 .pbf{height:100%;background:var(--accent);border-radius:6px;}
-.pbt{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;}
+.pbt{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;}
 .db{padding:16px;}
 .sec-t{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
 .skc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;}
-.skc:active{opacity:.85;}
+.skc:active{opacity:.8;}
 .skc .ico{font-size:24px;margin-bottom:6px;}
 .skc h4{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;}
 .skc p{font-size:11px;color:var(--muted);}
@@ -79,246 +66,198 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
 .skbf{height:100%;border-radius:6px;}
 .qag{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .qab{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;}
-.qab:active{opacity:.85;}
+.qab:active{opacity:.8;}
 .qab .ico{font-size:22px;margin-bottom:6px;}
-.qab p{font-size:12px;font-weight:600;color:var(--navy);}
+.qab p{font-size:12px;font-weight:700;color:var(--navy);}
 .qab span{font-size:11px;color:var(--muted);}
-
-/* LESSON */
-.stage{background:#0F2040;padding:14px 16px 12px;display:flex;gap:12px;align-items:flex-end;flex-shrink:0;min-height:170px;position:relative;}
-.sglow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(74,144,226,.18),transparent 60%);pointer-events:none;}
-.av-wrap{width:80px;flex-shrink:0;z-index:1;}
+.stage{background:#0F2040;padding:14px 16px 12px;display:flex;gap:12px;align-items:flex-end;flex-shrink:0;min-height:164px;position:relative;}
+.sglow{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(74,144,226,.2),transparent 60%);pointer-events:none;}
+.av-wrap{width:76px;flex-shrink:0;z-index:1;}
 @keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .av-anim{animation:breathe 3s ease-in-out infinite;}
-.av-fig{width:80px;height:110px;position:relative;}
-/* Avatar face */
-.av-head{position:absolute;bottom:64px;left:10px;right:10px;height:50px;border-radius:50% 50% 42% 42%;}
-.av-hair{position:absolute;bottom:98px;left:8px;right:8px;height:28px;border-radius:50% 50% 15% 15%;}
-.av-eye{position:absolute;width:7px;height:6px;background:#1C0A00;border-radius:50%;bottom:88px;}
-.av-el{left:18px;}.av-er{right:18px;}
-.av-mouth{position:absolute;bottom:68px;left:50%;transform:translateX(-50%);width:12px;height:4px;background:#9B4030;border-radius:0 0 7px 7px;}
-.av-neck{position:absolute;bottom:54px;left:28px;right:28px;height:12px;border-radius:4px;}
-.av-body{position:absolute;bottom:0;left:6px;right:6px;height:58px;border-radius:10px 10px 5px 5px;}
-.av-al{position:absolute;bottom:4px;left:-2px;width:12px;height:40px;border-radius:6px;transform:rotate(-5deg);transform-origin:top center;}
-.av-ar{position:absolute;bottom:4px;right:-2px;width:12px;height:40px;border-radius:6px;transform:rotate(5deg);transform-origin:top center;}
-@keyframes talk{0%,100%{height:4px}25%{height:10px;border-radius:0 0 7px 7px}50%{height:3px}75%{height:12px}}
-.talking .av-mouth{animation:talk .38s steps(1) infinite!important;}
-
-/* BUBBLE */
+.av-fig{width:76px;height:108px;position:relative;}
 .bubble{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px 12px 12px 4px;padding:11px 13px;z-index:1;align-self:flex-end;}
-.bname{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:3px;}
-.btext{font-size:13px;color:rgba(255,255,255,.9);line-height:1.55;min-height:40px;}
-.bctrl{display:flex;align-items:center;justify-content:space-between;margin-top:7px;}
+.bname{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.btext{font-size:13px;color:rgba(255,255,255,.92);line-height:1.55;min-height:38px;}
+.bctrl{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
 .sdots{display:flex;gap:3px;align-items:center;}
 .sd{width:4px;height:4px;border-radius:50%;background:var(--accent);animation:sp .6s ease-in-out infinite;}
 .sd:nth-child(2){animation-delay:.15s;}.sd:nth-child(3){animation-delay:.3s;}
 @keyframes sp{0%,100%{transform:scaleY(1);opacity:.4}50%{transform:scaleY(2);opacity:1}}
-.tts-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:11px;padding:4px 10px;border-radius:16px;}
-
-/* WHITEBOARD */
+.tts-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:11px;padding:4px 10px;border-radius:16px;cursor:pointer;}
+@keyframes talk{0%,100%{height:4px}30%{height:10px}60%{height:3px}80%{height:12px}}
+.talking .av-mouth{animation:talk .35s steps(1) infinite!important;}
 .wb{background:#fff;border-bottom:1px solid var(--border);flex-shrink:0;}
-.wbi{padding:12px 14px;max-height:140px;overflow-y:auto;}
+.wbi{padding:10px 14px;max-height:130px;overflow-y:auto;}
 .wbi::-webkit-scrollbar{display:none;}
-.wbtit{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
-.wbp{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;opacity:0;transition:opacity .4s;}
+.wbtit{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.wbp{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px;opacity:0;transition:opacity .4s;}
 .wbp.show{opacity:1;}
 .wbn{width:18px;height:18px;background:var(--blue);color:#fff;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.wbpt{font-size:13px;color:var(--text,#0A1628);line-height:1.5;flex:1;}
-
-/* LESSON TABS */
+.wbpt{font-size:12px;color:#0A1628;line-height:1.5;flex:1;}
 .ltabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);background:#fff;flex-shrink:0;}
 .ltabs::-webkit-scrollbar{display:none;}
-.lt{padding:11px 16px;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;cursor:pointer;}
+.lt{padding:11px 16px;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2.5px solid transparent;white-space:nowrap;cursor:pointer;}
 .lt.on{color:var(--blue);border-bottom-color:var(--blue);}
-
-/* LESSON CARDS */
 .la{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch;}
 .la::-webkit-scrollbar{display:none;}
-.lc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;}
-.lc:active{opacity:.85;}
-.lc h4{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
-.lc p{font-size:12px;color:var(--muted);line-height:1.5;}
-.lcm{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
-.lbadge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:10px;}
-.lc-body{display:none;padding:0 14px 14px;}
-.lc-body.open{display:block;}
-.lbody{font-size:13px;color:#0A1628;line-height:1.75;}
+.lcard{background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+.lcard-hdr{padding:14px;cursor:pointer;}
+.lcard-hdr:active{opacity:.8;}
+.lcard-hdr h4{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.lcard-hdr p{font-size:12px;color:var(--muted);line-height:1.5;}
+.lcard-meta{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.lbadge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;}
+.lcard-body{display:none;padding:0 14px 14px;border-top:1px solid var(--border);}
+.lcard-body.open{display:block;}
+.lbody{font-size:13px;color:#0A1628;line-height:1.75;padding-top:12px;}
 .lbody h5{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--blue);margin:14px 0 6px;}
-.lbody .rule{background:var(--sky);border-left:3px solid var(--blue);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;}
-.lbody .warn{background:#FEE2E0;border-left:3px solid var(--coral);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;}
-.lbody .tip{background:#DCFCE7;border-left:3px solid var(--green);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;}
-.lbody .example{background:#FEF3DC;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px 12px;margin:10px 0;}
-
-/* PRACTICE */
-.pq{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px;}
-.pq-t{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;}
+.lbody .rule{background:var(--sky);border-left:3px solid var(--blue);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;font-size:13px;}
+.lbody .warn{background:#FEE2E0;border-left:3px solid var(--coral);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;font-size:13px;}
+.lbody .tip{background:#DCFCE7;border-left:3px solid var(--green);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0;font-size:13px;}
+.lbody .example{background:#FEF3DC;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:13px;}
+.ask-tutor-btn{width:100%;margin-top:14px;padding:12px;background:var(--blue);color:#fff;border-radius:10px;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+.pq-box{background:var(--sky);border-radius:10px;padding:14px;margin-top:14px;}
+.pq-title{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;}
+.pq-text{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.5;}
 .popt{width:100%;background:#fff;border:2px solid var(--border);border-radius:8px;padding:10px 12px;text-align:left;font-size:13px;color:#0A1628;display:flex;align-items:center;gap:10px;margin-bottom:7px;cursor:pointer;}
-.popt.sel{border-color:var(--blue);background:var(--sky);}
 .popt.correct{border-color:var(--green);background:#DCFCE7;}
 .popt.wrong{border-color:var(--coral);background:#FEE2E0;}
+.popt:disabled{cursor:default;}
 .pol{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
-.popt.sel .pol{border-color:var(--blue);background:var(--blue);color:#fff;}
 .popt.correct .pol{border-color:var(--green);background:var(--green);color:#fff;}
 .popt.wrong .pol{border-color:var(--coral);background:var(--coral);color:#fff;}
-.pexp{background:var(--sky);border-radius:8px;padding:12px;margin-top:10px;font-size:13px;color:#0A1628;line-height:1.6;display:none;}
+.pexp{font-size:13px;color:#0A1628;line-height:1.6;margin-top:8px;padding:10px;background:#fff;border-radius:8px;display:none;}
 .pexp.show{display:block;}
-
-/* MOCK TEST */
 #test{background:#fff;}
 .thdr{background:var(--navy);padding:12px 16px;flex-shrink:0;}
 .ttop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .tsec{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
 .ttimer{background:rgba(245,166,35,.2);border:1px solid rgba(245,166,35,.4);color:var(--accent);font-family:'Sora',sans-serif;font-size:14px;font-weight:700;padding:5px 12px;border-radius:20px;}
-.tdots{display:flex;gap:4px;flex-wrap:wrap;}
+.tdots{display:flex;gap:5px;flex-wrap:wrap;}
 .tdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);}
-.tdot.ans{background:var(--accent);}.tdot.cur{background:#fff;}
-.tscr{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;}
-.tscr::-webkit-scrollbar{display:none;}
-.qpassage{background:var(--sky);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px;margin-bottom:16px;font-size:13px;color:#0A1628;line-height:1.75;font-style:italic;}
+.tdot.done{background:var(--accent);}.tdot.cur{background:#fff;}
+.tscroll{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;}
+.tscroll::-webkit-scrollbar{display:none;}
+.qpassage{background:var(--sky);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px;margin-bottom:16px;font-size:13px;color:#0A1628;line-height:1.8;}
 .qnum{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;}
-.qtext{font-family:'Sora',sans-serif;font-size:15px;font-weight:600;color:var(--navy);margin-bottom:14px;line-height:1.5;}
-.opts{display:flex;flex-direction:column;gap:8px;}
-.opt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:12px 14px;text-align:left;width:100%;font-size:14px;color:#0A1628;display:flex;align-items:center;gap:10px;cursor:pointer;}
-.opt.sel{border-color:var(--blue);background:var(--sky);}
-.opt.correct{border-color:var(--green);background:#DCFCE7;}
-.opt.wrong{border-color:var(--coral);background:#FEE2E0;}
-.ol{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
-.opt.sel .ol{border-color:var(--blue);background:var(--blue);color:#fff;}
-.opt.correct .ol{border-color:var(--green);background:var(--green);color:#fff;}
-.opt.wrong .ol{border-color:var(--coral);background:var(--coral);color:#fff;}
-.exp-box{background:var(--sky);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px;display:none;}
-.exp-box.show{display:block;}
-.exp-lbl{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;}
-.exp-txt{font-size:13px;color:#0A1628;line-height:1.7;}
-.short-inp{width:100%;border:2px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;outline:none;margin-bottom:10px;}
-.short-inp:focus{border-color:var(--blue);}
-.tnav{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;background:#fff;}
-.tnav button{flex:1;padding:12px;border-radius:10px;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
-.tnav .prev{background:var(--surface);color:var(--navy);border:1.5px solid var(--border);}
-.tnav .next{background:var(--blue);color:#fff;}
-.tnav .submit{background:var(--accent);color:var(--navy);}
-
-/* RESULTS */
-.results{padding:20px;text-align:center;}
-.rb{width:100px;height:100px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;flex-direction:column;}
-.rb-n{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;color:var(--navy);}
-.rb-l{font-size:12px;font-weight:600;color:var(--navy);}
-.rs-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
-.rs-sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-.qr-row{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;text-align:left;display:flex;gap:10px;align-items:flex-start;}
-.qr-icon{font-size:16px;flex-shrink:0;}
-.qr-q{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.qtext{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--navy);margin-bottom:16px;line-height:1.5;}
+.topts{display:flex;flex-direction:column;gap:8px;}
+.topt{background:#fff;border:2px solid var(--border);border-radius:10px;padding:13px 14px;text-align:left;width:100%;font-size:14px;color:#0A1628;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.topt.sel{border-color:var(--blue);background:var(--sky);}
+.topt.correct{border-color:var(--green);background:#DCFCE7;}
+.topt.wrong{border-color:var(--coral);background:#FEE2E0;}
+.tol{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.topt.sel .tol{border-color:var(--blue);background:var(--blue);color:#fff;}
+.topt.correct .tol{border-color:var(--green);background:var(--green);color:#fff;}
+.topt.wrong .tol{border-color:var(--coral);background:var(--coral);color:#fff;}
+.shortinp{width:100%;border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;outline:none;margin-bottom:10px;}
+.shortinp:focus{border-color:var(--blue);}
+.expbox{background:var(--sky);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px;display:none;}
+.expbox.show{display:block;}
+.explbl{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+.exptxt{font-size:13px;color:#0A1628;line-height:1.7;}
+.tnav{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:#fff;}
+.tnav button{flex:1;padding:12px;border-radius:10px;font-family:'Sora',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+.btn-prev{background:var(--surface);color:var(--navy);}
+.btn-check{background:var(--teal);color:#fff;}
+.btn-next{background:var(--blue);color:#fff;}
+.btn-submit{background:var(--accent);color:var(--navy);}
+.results{padding:20px;}
+.res-circle{width:100px;height:100px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;flex-direction:column;}
+.res-n{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;color:var(--navy);}
+.res-l{font-size:12px;font-weight:600;color:var(--navy);}
+.res-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--navy);text-align:center;margin-bottom:8px;}
+.res-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:20px;line-height:1.6;}
+.qr-row{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+.qr-q{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px;}
 .qr-e{font-size:12px;color:var(--muted);line-height:1.5;}
-
-/* CHAT */
 #chat{background:var(--surface);}
 .cmsgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;}
 .cmsgs::-webkit-scrollbar{display:none;}
 .cmsg{display:flex;gap:8px;align-items:flex-start;}
 .cmsg.user{margin-left:auto;flex-direction:row-reverse;max-width:88%;}
 .cmsg.ai{max-width:92%;}
-.cav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-.cbody{}
+.cav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .cname{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:3px;}
 .cmsg.user .cname{text-align:right;}
-.cbub{padding:11px 13px;border-radius:12px;font-size:13px;line-height:1.6;}
-.cmsg.ai .cbub{background:#fff;border:1px solid var(--border);border-top-left-radius:4px;}
+.cbub{padding:11px 13px;border-radius:12px;font-size:13px;line-height:1.65;}
+.cmsg.ai .cbub{background:#fff;border:1px solid var(--border);border-top-left-radius:4px;color:#0A1628;}
 .cmsg.user .cbub{background:var(--blue);color:#fff;border-top-right-radius:4px;}
-.typing{background:#fff;border:1px solid var(--border);border-radius:12px;border-top-left-radius:4px;padding:12px 14px;display:flex;gap:4px;}
-.tb2{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:tbb 1s ease-in-out infinite;}
-.tb2:nth-child(2){animation-delay:.2s;}.tb2:nth-child(3){animation-delay:.4s;}
-@keyframes tbb{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
-.csug{display:flex;gap:7px;overflow-x:auto;padding:6px 12px;flex-shrink:0;}
+.typing-bub{background:#fff;border:1px solid var(--border);border-radius:12px;border-top-left-radius:4px;padding:12px 14px;display:flex;gap:4px;}
+.td{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:tdb 1s ease-in-out infinite;}
+.td:nth-child(2){animation-delay:.2s;}.td:nth-child(3){animation-delay:.4s;}
+@keyframes tdb{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+.csug{display:flex;gap:7px;overflow-x:auto;padding:6px 12px;flex-shrink:0;background:var(--surface);}
 .csug::-webkit-scrollbar{display:none;}
 .cs{background:#fff;border:1px solid var(--border);color:var(--blue);font-size:12px;font-weight:500;padding:7px 13px;border-radius:20px;white-space:nowrap;cursor:pointer;flex-shrink:0;}
-.cir{padding:8px 12px;background:#fff;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
-.ci{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:9px 15px;font-size:14px;resize:none;max-height:80px;outline:none;line-height:1.4;}
+.cs:active{background:var(--sky);}
+.chat-bottom{padding:8px 12px;background:#fff;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
+.ci{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:10px 16px;font-size:14px;resize:none;max-height:80px;outline:none;line-height:1.4;}
 .ci:focus{border-color:var(--blue);}
-.csend{width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-
-/* WRITING PRACTICE */
-.wprac{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px;}
-.wprac h5{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px;}
-.wprac p{font-size:13px;color:var(--muted);margin-bottom:8px;}
-.wa{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;resize:vertical;min-height:100px;outline:none;line-height:1.6;}
-.wa:focus{border-color:var(--blue);}
-.wfb{background:var(--sky);border-radius:8px;padding:12px;margin-top:8px;font-size:13px;line-height:1.7;display:none;}
-.wfb.show{display:block;}
-
-/* PROGRESS */
+.csend{width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;cursor:pointer;border:none;}
 #progress{background:var(--surface);}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 14px 0;}
 .sc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
-.sn{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--navy);}
+.sn{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--navy);}
 .sl{font-size:11px;color:var(--muted);margin-top:3px;}
 .bchart{background:#fff;border:1px solid var(--border);border-radius:12px;margin:10px 14px 0;padding:14px;}
-.bct{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.bct{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:14px;}
 .br{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .brl{font-size:12px;font-weight:500;color:var(--muted);width:68px;flex-shrink:0;}
 .brtrack{flex:1;background:var(--surface);border-radius:6px;height:8px;overflow:hidden;}
-.brf{height:100%;border-radius:6px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
-.brs{font-size:12px;font-weight:700;color:var(--navy);width:24px;text-align:right;}
-.airec{background:#FEF3DC;border:1px solid rgba(245,166,35,.3);border-radius:12px;margin:10px 14px;padding:14px;}
-.airt{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px;}
+.brf{height:100%;border-radius:6px;width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1);}
+.brs{font-size:12px;font-weight:700;color:var(--navy);width:26px;text-align:right;}
+.airec{background:#FEF3DC;border:1px solid rgba(245,166,35,.3);border-radius:12px;margin:10px 14px 14px;padding:14px;}
+.airt{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;}
 .airec p{font-size:13px;color:var(--muted);line-height:1.6;}
-
-/* TOAST */
-.toast{position:fixed;bottom:calc(var(--nav)+10px);left:14px;right:14px;background:var(--navy);color:#fff;font-size:13px;padding:12px 14px;border-radius:12px;z-index:300;display:none;gap:9px;align-items:center;}
+.toast{position:fixed;bottom:calc(var(--nav)+12px);left:14px;right:14px;background:#1e293b;color:#fff;font-size:13px;padding:12px 14px;border-radius:12px;z-index:500;display:none;gap:8px;align-items:center;}
 .toast.show{display:flex;}
 </style>
 </head>
 <body>
-
-<!-- WELCOME -->
 <div class="screen active" id="welcome">
   <div class="wbg"></div>
   <div class="win">
-    <img class="wlogo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg" alt="SpecTa"/>
-    <div class="wtag">AI Tutor Platform · IELTS Edition</div>
+    <img class="wlogo" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663225686644/QxrYSewOYzAuPIEN.jpeg" alt="SpecTa" onerror="this.style.display='none'"/>
+    <div class="wtag">AI Tutor · IELTS Edition</div>
     <h1 class="wh1">Your Personal<br/><span>AI IELTS Tutor</span><br/>Is Here.</h1>
-    <p class="wsub">Real lessons. Real practice. Real AI tutor that teaches, explains, and answers your questions — everything from Reading to Speaking.</p>
-    <div class="wchips">
-      <span class="wchip">📖 Reading</span><span class="wchip">✍️ Writing</span><span class="wchip">🎧 Listening</span><span class="wchip">🗣️ Speaking</span>
-    </div>
-    <button class="btn btn-gold" onclick="GO('tutor-select')" style="margin-bottom:10px">Get Started Free →</button>
+    <p class="wsub">Real lessons with real explanations. Practice questions. AI chat. Full mock test. Everything to get you to the band score you need.</p>
+    <div class="wchips"><span class="wchip">📖 Reading</span><span class="wchip">✍️ Writing</span><span class="wchip">🎧 Listening</span><span class="wchip">🗣️ Speaking</span></div>
+    <button class="btn btn-gold" onclick="GO('tutor-select')" style="margin-bottom:10px">Start Learning →</button>
   </div>
 </div>
-
-<!-- TUTOR SELECT -->
 <div class="screen" id="tutor-select">
-  <div class="tb"><button class="tb-b" onclick="GO('welcome')">←</button><span class="tb-t">Choose Your Tutor</span></div>
+  <div class="topbar"><button class="topbar-back" onclick="GO('welcome')">←</button><span class="topbar-title">Choose Your Tutor</span></div>
   <div class="scroll" style="padding:14px">
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Your tutor teaches in your preferred style. You can switch anytime.</p>
-    <div id="tpicks"></div>
-    <button class="btn btn-blue" onclick="confirmTutor()">Start Learning →</button>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Pick the teaching style that works best for you.</p>
+    <div class="tcard on" id="pick-maya" onclick="pickTutor('maya')"><div class="tav" style="background:#E8F1FB">👩‍🏫</div><div><div class="tc-name">Dr. Maya</div><div class="tc-role" style="color:var(--blue)">Academic Expert</div><div class="tc-desc">Thorough, step-by-step explanations. Cites IELTS band descriptors. Best for deep understanding.</div></div></div>
+    <div class="tcard" id="pick-alex" onclick="pickTutor('alex')"><div class="tav" style="background:#FEE2E0">👨‍💼</div><div><div class="tc-name">Alex</div><div class="tc-role" style="color:var(--coral)">Score Booster</div><div class="tc-desc">Direct, tactical, no fluff. Shortcuts and high-impact strategies. Best for fast score gains.</div></div></div>
+    <div class="tcard" id="pick-sari" onclick="pickTutor('sari')"><div class="tav" style="background:#EDE9FE">🧑‍🎓</div><div><div class="tc-name">Sari</div><div class="tc-role" style="color:var(--purple)">Confidence Coach</div><div class="tc-desc">Warm, patient, encouraging. Reduces exam anxiety. Best for nervous learners.</div></div></div>
+    <button class="btn btn-blue" onclick="confirmTutor()" style="margin-top:8px">Start Learning →</button>
   </div>
 </div>
-
-<!-- DASHBOARD -->
 <div class="screen" id="dashboard">
   <div class="scroll">
     <div class="hero">
       <div class="hero-g">Welcome back 👋</div>
       <div class="hero-n" id="d-name">IELTS Dashboard</div>
-      <div class="hero-c">
-        <div class="hero-b"><div class="hbn" id="d-band">5.5</div><div class="hbl">Est. Band</div></div>
-        <div class="hprog"><h4>Overall Progress</h4><div class="pbar"><div class="pbf" id="d-prog" style="width:12%"></div></div><div class="pbt">12% · 3 of 24 lessons done</div></div>
-      </div>
+      <div class="hero-c"><div class="hero-b"><div class="hbn">5.5</div><div class="hbl">Est. Band</div></div><div class="hprog"><h4>Overall Progress</h4><div class="pbar"><div class="pbf" style="width:18%"></div></div><div class="pbt">18% complete · 4 of 22 lessons</div></div></div>
     </div>
     <div class="db">
       <div class="sec-t">IELTS Skills</div>
       <div class="sg">
         <div class="skc" onclick="openSkill('reading')"><div class="ico">📖</div><h4>Reading</h4><p>13 question types</p><div class="skb"><div class="skbf" style="width:20%;background:var(--blue)"></div></div></div>
-        <div class="skc" onclick="openSkill('writing')"><div class="ico">✍️</div><h4>Writing</h4><p>Task 1 & Task 2</p><div class="skb"><div class="skbf" style="width:8%;background:#00B4A6"></div></div></div>
+        <div class="skc" onclick="openSkill('writing')"><div class="ico">✍️</div><h4>Writing</h4><p>Task 1 &amp; Task 2</p><div class="skb"><div class="skbf" style="width:8%;background:var(--teal)"></div></div></div>
         <div class="skc" onclick="openSkill('listening')"><div class="ico">🎧</div><h4>Listening</h4><p>4 section mastery</p><div class="skb"><div class="skbf" style="width:35%;background:var(--accent)"></div></div></div>
-        <div class="skc" onclick="openSkill('speaking')"><div class="ico">🗣️</div><h4>Speaking</h4><p>Parts 1, 2 & 3</p><div class="skb"><div class="skbf" style="width:5%;background:var(--purple)"></div></div></div>
+        <div class="skc" onclick="openSkill('speaking')"><div class="ico">🗣️</div><h4>Speaking</h4><p>Parts 1, 2 &amp; 3</p><div class="skb"><div class="skbf" style="width:5%;background:var(--purple)"></div></div></div>
       </div>
       <div class="sec-t">Quick Actions</div>
       <div class="qag">
         <div class="qab" onclick="startTest()"><div class="ico">📝</div><p>Mock Test</p><span>Academic Reading</span></div>
         <div class="qab" onclick="openChat()"><div class="ico">🤖</div><p>Ask Tutor</p><span>Any question</span></div>
-        <div class="qab" onclick="openSkill('tips')"><div class="ico">💡</div><p>Tips & Tricks</p><span>Score boosters</span></div>
-        <div class="qab" onclick="GO('progress');setTimeout(animBars,300)"><div class="ico">📊</div><p>My Progress</p><span>View scores</span></div>
+        <div class="qab" onclick="openSkill('tips')"><div class="ico">💡</div><p>Tips &amp; Tricks</p><span>Score boosters</span></div>
+        <div class="qab" onclick="GO('progress');setTimeout(animBars,200)"><div class="ico">📊</div><p>My Progress</p><span>View scores</span></div>
       </div>
     </div>
   </div>
@@ -327,549 +266,477 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;}
     <button class="bn" onclick="openSkill('reading')"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Lessons</button>
     <button class="bn" onclick="startTest()"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Test</button>
     <button class="bn" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Chat</button>
-    <button class="bn" onclick="GO('progress');setTimeout(animBars,300)"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress</button>
+    <button class="bn" onclick="GO('progress');setTimeout(animBars,200)"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress</button>
   </nav>
 </div>
-
-<!-- LESSON -->
 <div class="screen" id="lesson">
-  <div class="tb"><button class="tb-b" onclick="GO('dashboard')">←</button><span class="tb-t" id="l-title">Lessons</span></div>
+  <div class="topbar"><button class="topbar-back" onclick="GO('dashboard')">←</button><span class="topbar-title" id="l-title">Lessons</span></div>
   <div class="stage" id="l-stage">
     <div class="sglow"></div>
     <div class="av-wrap"><div class="av-anim"><div class="av-fig" id="l-avatar"></div></div></div>
-    <div class="bubble"><div class="bname" id="b-name">Dr. Maya</div><div class="btext" id="b-text">Select a lesson to begin.</div><div class="bctrl"><div class="sdots" id="b-dots" style="display:none"><div class="sd"></div><div class="sd"></div><div class="sd"></div></div><button class="tts-btn" id="tts-btn" onclick="toggleTTS()">🔊 Speak</button></div></div>
+    <div class="bubble"><div class="bname" id="b-name">Tutor</div><div class="btext" id="b-text">Select a lesson below to begin.</div><div class="bctrl"><div class="sdots" id="b-dots" style="display:none"><div class="sd"></div><div class="sd"></div><div class="sd"></div></div><button class="tts-btn" onclick="toggleTTS()">🔊 Speak</button></div></div>
   </div>
-  <div class="wb" id="l-wb"><div class="wbi"><div class="wbtit">📋 Lesson Notes</div><div id="wb-pts"><div style="font-size:13px;color:var(--muted);font-style:italic">Select a lesson card below to begin.</div></div></div></div>
+  <div class="wb"><div class="wbi"><div class="wbtit">📋 Key Points</div><div id="wb-pts"><div style="font-size:12px;color:var(--muted);font-style:italic">Tap a lesson card to see key points here.</div></div></div></div>
   <div class="ltabs" id="l-tabs"></div>
   <div class="la" id="l-area"></div>
 </div>
-
-<!-- TEST -->
 <div class="screen" id="test">
-  <div class="thdr">
-    <div class="ttop"><span class="tsec" id="t-sec">Question 1 of 10</span><span class="ttimer" id="t-timer">20:00</span></div>
-    <div class="tdots" id="t-dots"></div>
-  </div>
-  <div class="tscr" id="t-content"></div>
+  <div class="thdr"><div class="ttop"><span class="tsec" id="t-sec">IELTS Reading Test</span><span class="ttimer" id="t-timer">20:00</span></div><div class="tdots" id="t-dots"></div></div>
+  <div class="tscroll" id="t-content"></div>
   <div class="tnav" id="t-nav"></div>
 </div>
-
-<!-- CHAT -->
 <div class="screen" id="chat">
-  <div class="tb"><button class="tb-b" onclick="GO('dashboard')">←</button><span class="tb-t" id="chat-title">Chat with Dr. Maya</span></div>
+  <div class="topbar"><button class="topbar-back" onclick="GO('dashboard')">←</button><span class="topbar-title" id="chat-title">Ask Your Tutor</span></div>
   <div class="cmsgs" id="chat-msgs"></div>
   <div class="csug" id="chat-sug"></div>
-  <div class="cir"><textarea class="ci" id="chat-in" placeholder="Ask anything about IELTS..." rows="1"></textarea><button class="csend" onclick="sendChat()">➤</button></div>
+  <div class="chat-bottom"><textarea class="ci" id="chat-in" placeholder="Ask anything about IELTS..." rows="1"></textarea><button class="csend" id="send-btn" onclick="sendChat()">➤</button></div>
 </div>
-
-<!-- PROGRESS -->
 <div class="screen" id="progress">
-  <div class="tb"><button class="tb-b" onclick="GO('dashboard')">←</button><span class="tb-t">My Progress</span></div>
+  <div class="topbar"><button class="topbar-back" onclick="GO('dashboard')">←</button><span class="topbar-title">My Progress</span></div>
   <div class="scroll">
     <div class="stats">
       <div class="sc"><div class="sn" id="p-band">5.5</div><div class="sl">Est. Band Score</div></div>
-      <div class="sc"><div class="sn" id="p-done">3</div><div class="sl">Lessons Complete</div></div>
+      <div class="sc"><div class="sn" id="p-lessons">4</div><div class="sl">Lessons Done</div></div>
       <div class="sc"><div class="sn" id="p-tests">0</div><div class="sl">Tests Taken</div></div>
       <div class="sc"><div class="sn" id="p-score">—</div><div class="sl">Last Test Score</div></div>
     </div>
-    <div class="bchart">
-      <div class="bct">Estimated Band by Skill</div>
-      <div class="br"><span class="brl">Reading</span><div class="brtrack"><div class="brf" id="br-r" style="background:var(--blue)" data-w="55"></div></div><span class="brs" id="bs-r">5.5</span></div>
-      <div class="br"><span class="brl">Writing</span><div class="brtrack"><div class="brf" id="br-w" style="background:#00B4A6" data-w="50"></div></div><span class="brs" id="bs-w">5.0</span></div>
-      <div class="br"><span class="brl">Listening</span><div class="brtrack"><div class="brf" id="br-l" style="background:var(--accent)" data-w="65"></div></div><span class="brs" id="bs-l">6.5</span></div>
-      <div class="br"><span class="brl">Speaking</span><div class="brtrack"><div class="brf" id="br-s" style="background:var(--purple)" data-w="45"></div></div><span class="brs" id="bs-s">4.5</span></div>
+    <div class="bchart"><div class="bct">Estimated Band by Skill</div>
+      <div class="br"><span class="brl">Reading</span><div class="brtrack"><div class="brf" id="br-r" style="background:var(--blue)" data-w="55"></div></div><span class="brs">5.5</span></div>
+      <div class="br"><span class="brl">Writing</span><div class="brtrack"><div class="brf" id="br-w" style="background:var(--teal)" data-w="50"></div></div><span class="brs">5.0</span></div>
+      <div class="br"><span class="brl">Listening</span><div class="brtrack"><div class="brf" id="br-l" style="background:var(--accent)" data-w="62"></div></div><span class="brs">6.0</span></div>
+      <div class="br"><span class="brl">Speaking</span><div class="brtrack"><div class="brf" id="br-s" style="background:var(--purple)" data-w="45"></div></div><span class="brs">4.5</span></div>
     </div>
-    <div class="airec"><div class="airt">🤖 AI Recommendation</div><p id="p-rec">Complete more lessons to get personalised recommendations from your AI tutor.</p></div>
+    <div class="airec"><div class="airt">🤖 AI Recommendation</div><p>Your Listening is strongest. Focus on Writing Task 2 structure and Reading True/False/Not Given to raise your overall band score.</p></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
-// ─── STATE ──────────────────────────────────────────────
-const APP = {
-  tutor: localStorage.getItem('tutor') || 'maya',
-  skill: 'reading',
-  openCard: null,
-  chatHistory: [],
-  testState: null,
-  testTimer: null,
-  ttsUtterance: null,
-  ttsSpeaking: false,
-  stats: JSON.parse(localStorage.getItem('stats')||'{"tests":0,"lastScore":0,"lessons":3}')
-};
+const TUTORS={maya:{name:'Dr. Maya',emoji:'👩‍🏫',color:'#1A4FA0',soft:'#E8F1FB',greet:"Hello! I'm Dr. Maya. I'll walk you through each concept with clear explanations and real IELTS examples. Select any lesson to begin.",system:"You are Dr. Maya, a senior IELTS examiner and academic tutor with 15 years experience. Give structured thorough explanations. Use real IELTS examples. Be formal but warm. When evaluating writing give a band estimate and 3 specific improvements. Keep responses under 200 words. Current lesson: {LESSON}"},alex:{name:'Alex',emoji:'👨‍💼',color:'#E55A4E',soft:'#FEE2E0',greet:"Hey! I'm Alex — I cut straight to what gets you bands. No fluff, just results. Tap any lesson and let's go.",system:"You are Alex, a high-energy IELTS coach. Be direct, use bullet points, give the 20% effort that gets 80% results. When evaluating writing give honest band estimate and top 2 quick fixes. Under 200 words. Current lesson: {LESSON}"},sari:{name:'Sari',emoji:'🧑‍🎓',color:'#7C3AED',soft:'#EDE9FE',greet:"Hi! I'm Sari. Exams can feel overwhelming but we'll go step by step together. Pick a lesson when you're ready!",system:"You are Sari, a warm patient IELTS confidence coach. Use friendly language. Normalise mistakes. When evaluating writing start with what they did well. Under 200 words. Current lesson: {LESSON}"}};
 
-// ─── NAVIGATION ─────────────────────────────────────────
-function GO(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (id === 'dashboard') renderDashboard();
+const LESSONS={reading:[
+{id:'r1',title:'The 13 IELTS Question Types',badge:'Foundation',bs:'background:#E8F1FB;color:#1A4FA0',dur:'10 min',
+intro:"There are exactly 13 question types in IELTS Reading. The moment you see a question you must instantly know the technique. Let me walk you through all 13.",
+points:['Multiple Choice — pick A B C or D','True / False / Not Given — confirm contradict or not mentioned?','Yes / No / Not Given — for opinions and claims only','Matching Headings — match paragraphs to heading list','Matching Information — which paragraph has this info?','Matching Features — match items to categories','Matching Sentence Endings — complete sentences logically','Summary Completion — fill gaps in a summary','Note Completion — fill structured notes','Table Completion — complete a table','Flow-chart Completion — complete a process','Diagram Label Completion — label a diagram','Short Answer — answer in a few words'],
+content:`<h5>The 3 Most Tested Types</h5><div class="rule"><strong>1. True / False / Not Given</strong><br>TRUE = text directly confirms<br>FALSE = text directly contradicts<br>NOT GIVEN = text does not mention it<br><br>Biggest mistake: choosing FALSE when the text simply does not mention it. If it is not there — it is NOT GIVEN.</div><div class="rule"><strong>2. Matching Headings</strong><br>A heading describes the MAIN IDEA of the whole paragraph — not just one detail. Read the first and last sentence of each paragraph first.</div><div class="rule"><strong>3. Multiple Choice</strong><br>Check ALL options before choosing. The correct answer paraphrases the text — almost never uses the same words.</div><h5>The Golden Rule</h5><div class="tip">✅ Questions follow the ORDER of the text (except Matching Headings). Use this to locate answers faster — never search the whole passage for every question.</div><div class="warn">❌ Never spend more than 90 seconds on one question. Mark it, move on, come back. Time kills more students than difficulty does.</div>`,
+practice:{q:'In IELTS Reading, if a statement makes a claim the passage simply does not mention anywhere, the answer is:',opts:['TRUE','FALSE','NOT GIVEN','Cannot determine'],ans:2,explain:"NOT GIVEN means the passage is completely silent on the point. It does not confirm it and does not contradict it — it simply never mentions it."}},
+
+{id:'r2',title:'True / False / Not Given Mastery',badge:'High Value',bs:'background:#FEF3DC;color:#92400e',dur:'12 min',
+intro:"True/False/Not Given is the question type students fail most often — even strong English speakers. The gap between FALSE and NOT GIVEN is the key to mastering it.",
+points:['Identify the exact CLAIM the statement is making','Scan passage for keywords or their synonyms','Read that sentence AND the ones before and after','TRUE: passage directly confirms the claim','FALSE: passage directly contradicts the claim','NOT GIVEN: passage never addresses the claim','Your outside knowledge is completely irrelevant'],
+content:`<h5>FALSE vs NOT GIVEN — The Critical Difference</h5><div class="example"><strong>Passage:</strong> "The company was founded in 1995 in London."<br><br>Statement A: "The company was founded in the 1990s." → <strong>TRUE</strong> (1995 is in the 1990s)<br>Statement B: "The company was founded in New York." → <strong>FALSE</strong> (passage says London)<br>Statement C: "The company now has 500 employees." → <strong>NOT GIVEN</strong> (never mentioned)</div><h5>The Common Sense Trap</h5><div class="warn">❌ If you THINK something must be true from your own knowledge — but the passage does not say it — the answer is NOT GIVEN. Your personal knowledge is irrelevant. Only the text counts.</div><h5>Step-by-Step Technique</h5><div class="rule">Step 1: Underline the KEY CLAIM in the statement<br>Step 2: Scan for those keywords or synonyms in the passage<br>Step 3: Read that sentence plus one before and after<br>Step 4: Does the passage directly confirm, directly contradict, or just not mention this?</div><div class="tip">✅ When stuck between FALSE and NOT GIVEN — choose NOT GIVEN. Examiners rarely make FALSE obvious.</div>`,
+practice:{q:'Passage says: "Solar panels were first commercially available in the 1980s." Statement: "Solar panels became popular among homeowners in the 1980s." Answer?',opts:['TRUE','FALSE','NOT GIVEN'],ans:2,explain:"NOT GIVEN. The passage says they were commercially AVAILABLE in the 1980s — but says nothing about whether homeowners found them popular. Availability does not equal popularity. The claim about homeowner popularity is simply not addressed."}},
+
+{id:'r3',title:'Skimming and Scanning Techniques',badge:'Speed Skills',bs:'background:#E0F9F7;color:#134E4A',dur:'8 min',
+intro:"Reading every word in IELTS is the biggest time trap. You have 60 minutes for 40 questions — 90 seconds per question. Skimming and scanning are essential survival skills.",
+points:['Skimming = reading fast to get the GENERAL topic and structure','Scanning = searching for a SPECIFIC piece of information','Never read word-by-word unless answering a specific question','First 30 seconds: skim title and first sentence of each paragraph','Then: scan for each answer using keywords from the question'],
+content:`<h5>How to Skim a Passage (30 seconds)</h5><div class="rule">Read ONLY: the title, the first sentence of each paragraph, and the final sentence of the passage. This gives you the structure and topic without wasting time on details you may never need.</div><h5>How to Scan for Answers</h5><div class="rule">Let your eyes move quickly down the page looking for: CAPITAL LETTERS (names places), NUMBERS (dates statistics), UNUSUAL WORDS (technical terms). These stand out visually without reading full sentences.</div><h5>The Paraphrase Challenge</h5><div class="warn">⚠️ Questions almost NEVER use the same words as the passage. IELTS deliberately paraphrases. You must think in synonyms while scanning.</div><div class="example"><strong>Question says "reduce"</strong> → passage might say: decrease decline drop fall lower cut shrink diminish<br><strong>Question says "important"</strong> → passage might say: significant crucial vital key essential major critical</div><div class="tip">✅ Before scanning ask yourself: what synonyms could this keyword have? Think of 3 alternatives. Then scan for any of them.</div>`,
+practice:{q:'You have 60 minutes for 40 IELTS Reading questions. How much time should you spend on ONE question at most?',opts:['30 seconds','90 seconds','3 minutes','5 minutes'],ans:1,explain:"90 seconds per question. 60 minutes ÷ 40 questions = 90 seconds each. If you spend 3+ minutes on one question you are stealing time from 4 other questions. Mark it and move on."}}
+],
+
+writing:[
+{id:'w1',title:'Task 2 Essay Types — All 5 Structures',badge:'High Value',bs:'background:#FEF3DC;color:#92400e',dur:'15 min',
+intro:"Every IELTS Writing Task 2 question is one of 5 essay types. Identify the type in 30 seconds and you already know exactly how to organise your entire essay.",
+points:['Opinion Essay — "To what extent do you agree or disagree?"','Discussion Essay — "Discuss both views and give your opinion"','Problem and Solution — "What are causes? What are solutions?"','Advantages and Disadvantages — "Do advantages outweigh disadvantages?"','Two-Part Question — two separate questions in one prompt'],
+content:`<h5>How to Identify the Essay Type</h5><div class="rule"><strong>Opinion Essay:</strong> "agree or disagree" → Give YOUR clear position in intro and conclusion. Do not sit on the fence.<br><br><strong>Discussion Essay:</strong> "discuss both views" → Cover BOTH sides fairly then give your own opinion.<br><br><strong>Problem and Solution:</strong> "what problems" or "what solutions" → Para 1 = problems, Para 2 = solutions<br><br><strong>Advantages and Disadvantages:</strong> "outweigh" → Para 1 = advantages, Para 2 = disadvantages, then judge.<br><br><strong>Two-Part Question:</strong> Ends with TWO question marks → One paragraph per question.</div><h5>Band 7+ Opinion Essay Template</h5><div class="example"><strong>Introduction (~50 words):</strong><br>1. Paraphrase the topic — NEVER copy the question<br>2. State YOUR position: "I firmly believe that..."<br>3. Preview your 2 main reasons<br><br><strong>Body 1 (~90 words):</strong> Reason 1 + explain why + specific example<br><strong>Body 2 (~90 words):</strong> Reason 2 + explain why + specific example<br><strong>Conclusion (~40 words):</strong> Restate position + summarise. Never add new ideas.</div><div class="tip">✅ Ideal: 265–290 words. Under 250 = automatic band penalty. Over 320 = wastes time and increases errors.</div>`,
+practice:{q:'Task 2 question: "Some people think university education should be free for everyone. Others believe students should pay tuition fees. Discuss both views and give your own opinion." What type?',opts:['Opinion Essay','Discussion Essay','Problem and Solution Essay','Two-Part Question'],ans:1,explain:"This is a Discussion Essay. The keywords 'discuss both views' tell you to cover BOTH perspectives fairly — free university AND paid tuition — then give your own opinion. An Opinion Essay would say 'agree or disagree' without asking you to discuss both sides."}},
+
+{id:'w2',title:'Writing Band 7 Body Paragraphs',badge:'Structure',bs:'background:#EDE9FE;color:#5B21B6',dur:'12 min',
+intro:"A Band 7 body paragraph follows one structure: POINT → EXPLAIN → EXAMPLE → LINK. Most students write a point then jump to the next one — missing the explanation that earns marks.",
+points:['POINT: One clear topic sentence stating your argument','EXPLAIN: Why is this true? (2-3 sentences of reasoning)','EXAMPLE: A specific example — can be hypothetical','LINK: Connect back to the essay question in one sentence','One paragraph = one idea only'],
+content:`<h5>The PEEL Structure in Practice</h5><div class="example"><strong>Essay question:</strong> "Technology has made people less sociable. To what extent do you agree?"<br><br><strong>POINT:</strong> Technology has undeniably reduced the quality of face-to-face social interaction for many individuals.<br><br><strong>EXPLAIN:</strong> When people are constantly engaged with their smartphones during social gatherings they are physically present but mentally absent. This reduces the depth of conversation and weakens the interpersonal bonds essential for emotional wellbeing. Over time face-to-face communication skills begin to deteriorate.<br><br><strong>EXAMPLE:</strong> Research in the United States found the majority of young adults admitted to checking their phones during family meals suggesting a widespread shift in social priorities.<br><br><strong>LINK:</strong> This demonstrates that while technology connects people across distances it simultaneously creates distance between those in the same room.</div><div class="tip">✅ Your example does NOT need to be a real statistic. "Studies suggest..." "Research indicates..." "It has been observed that..." all signal academic writing even when the example is constructed. IELTS does not fact-check.</div><div class="warn">❌ Most common Band 5 mistake: writing a point sentence then immediately writing ANOTHER point sentence. Examiners want you to DEVELOP one idea thoroughly — not list five ideas briefly.</div>`,
+practice:{q:'Which sequence represents the correct PEEL paragraph structure?',opts:['Point → Example → Explain → Link','Point → Explain → Example → Link','Example → Point → Link → Explain','Explain → Point → Example → Link'],ans:1,explain:"Point → Explain → Example → Link. You state your argument (Point), explain WHY it is true with reasoning (Explain), give a specific example to support it (Example), then link back to the question (Link). Starting with an example before the point confuses the reader."}},
+
+{id:'w3',title:'Task 1 — Describing Charts and Graphs',badge:'Academic',bs:'background:#E8F1FB;color:#1A4FA0',dur:'12 min',
+intro:"Task 1 asks you to describe data — not explain why it happened. Your job is to select the most significant features and write an Overview. The Overview alone separates Band 6 from Band 7.",
+points:['Introduction: paraphrase the title — never copy it word for word','Overview: state the MOST SIGNIFICANT overall trends — no numbers','Body 1: describe the highest values and main data with specific figures','Body 2: describe comparisons exceptions or notable trends','Always include an Overview paragraph — this is what examiners look for'],
+content:`<h5>The Overview — Your Most Important Paragraph</h5><div class="rule">The Overview is 2 sentences placed after your introduction before the body paragraphs. It states the BIGGEST overall trends WITHOUT specific numbers. Many students skip it and automatically lose their Band 7.<br><br><strong>Example Overview:</strong> "Overall it is clear that Country A consistently produced the most goods throughout the period while Country C experienced the most significant growth overall."<br><br>Notice: no specific numbers. Just the main pattern and most striking trend.</div><h5>Essential Vocabulary for Trends</h5><div class="example"><strong>Going UP:</strong> rose increased grew climbed surged soared jumped<br><strong>Going DOWN:</strong> fell decreased declined dropped plummeted dipped slumped<br><strong>Stable:</strong> remained stable plateaued levelled off stayed constant<br><strong>Peak:</strong> peaked at reached a high of hit a maximum of<br><br><strong>Adverbs for Band 6+:</strong> sharply dramatically significantly gradually slightly marginally steadily</div><div class="warn">❌ Never write "The chart shows..." as your introduction. Paraphrase it: "The bar chart illustrates / compares / presents data regarding..."</div>`,
+practice:{q:'In IELTS Writing Task 1 where does the Overview paragraph go?',opts:['At the very end as a conclusion','In the middle of the body paragraphs','After the introduction before the body paragraphs','At the very beginning before the introduction'],ans:2,explain:"The Overview goes after the introduction and before the body paragraphs. It gives the examiner the main picture immediately. Putting it at the end like a conclusion is a common mistake that costs marks because examiners expect it early."}}
+],
+
+listening:[
+{id:'l1',title:'The 4 Sections Explained',badge:'Overview',bs:'background:#F3F4F6;color:#374151',dur:'8 min',
+intro:"IELTS Listening has 4 sections that get progressively harder. Know exactly what is in each section so nothing surprises you on exam day.",
+points:['Section 1: Everyday conversation — booking enquiry registration (easiest)','Section 2: Everyday monologue — tour announcement instructions','Section 3: Academic conversation — 2-4 speakers discussing study topics','Section 4: Academic monologue — university lecture (hardest)','All sections: questions follow the ORDER of the recording','You hear each recording ONCE ONLY — no replays'],
+content:`<h5>Section by Section Strategy</h5><div class="rule"><strong>Section 1 (Q1–10):</strong> Usually a phone call or booking. Expect names (spelled out), numbers, dates, addresses. Main risk: missing spelled letters. Listen carefully for spelling corrections like "that's B for Bravo..."</div><div class="rule"><strong>Section 2 (Q11–20):</strong> A public speech or announcement. Often includes a MAP to label. Focus on spatial language: "turn left at" "opposite the" "next to the" "between the".</div><div class="rule"><strong>Section 3 (Q21–30):</strong> Academic discussion — students planning an assignment. Tests opinions and reasons. Focus: WHO says WHAT — do not mix up the speakers.</div><div class="rule"><strong>Section 4 (Q31–40):</strong> University lecture. Dense vocabulary. No pause in the middle. Where most students lose marks. Focus: predict answers during reading time.</div><h5>The Most Critical Rule</h5><div class="warn">⚠️ You hear it ONCE. Unlike Reading you cannot go back. Use the 30-second reading time before each section to predict what TYPE of answer fits each gap: a number? a place name? a day of the week?</div>`,
+practice:{q:'In which IELTS Listening section would you most likely hear a university professor giving a lecture about climate science?',opts:['Section 1','Section 2','Section 3','Section 4'],ans:3,explain:"Section 4 is always an academic monologue — typically a university lecture on an academic subject. It has no pause in the middle and is the hardest section with the most complex academic vocabulary."}},
+
+{id:'l2',title:'The Prediction Strategy',badge:'Key Skill',bs:'background:#E0F9F7;color:#134E4A',dur:'10 min',
+intro:"The 30 seconds before each section is the most valuable time in the whole Listening exam. Students who do not use it are throwing away marks. Here is exactly how to use every second.",
+points:['Read ALL questions for the section during the 30-second pause','For each gap predict: WHAT TYPE of word fits here?','Look at words before and after the gap for grammatical clues','Identify if you need a number, date, name, or place','Underline keywords in each question to guide your ear','If you miss an answer — write a guess and MOVE ON immediately'],
+content:`<h5>Predicting Answer Types From Context</h5><div class="example"><strong>"Departure from _______ station"</strong> → Expect a place name (proper noun likely spelled out)<br><br><strong>"Number of participants: _______"</strong> → Expect a small number<br><br><strong>"Main disadvantage is its _______"</strong> → Expect a noun (cost complexity unreliability)<br><br><strong>"Recommended at _______ degrees"</strong> → Expect a number<br><br><strong>"The meeting is on _______"</strong> → Expect a day of the week or date</div><h5>Signal Phrases — Listen for These</h5><div class="rule">Answers often come RIGHT AFTER a signal phrase:<br>"The important thing to remember is..."<br>"What you need to bring is..."<br>"The deadline for this is..."<br>"I should mention that..."<br>"The most significant finding was..."</div><div class="warn">⚠️ If you miss an answer — do NOT stop to think about it. The recording keeps going. Write your best guess immediately and focus on the NEXT question. One missed answer is recoverable. Losing your place costs 3-4 answers.</div>`,
+practice:{q:'You see this gap: "Contact number: _______". What type of answer should you predict?',opts:["A person's name",'A number (phone number)','A place name','A day of the week'],ans:1,explain:"The label 'Contact number' tells you to expect a phone number — a string of digits. Knowing the answer type before you hear it means you can focus on capturing the digits accurately instead of wondering what you are listening for."}}
+],
+
+speaking:[
+{id:'s1',title:'Part 1 — Personal Questions',badge:'Overview',bs:'background:#F3F4F6;color:#374151',dur:'8 min',
+intro:"Part 1 lasts 4-5 minutes. The examiner asks about familiar topics: your home, work, hobbies, food, transport. These seem easy — but most students answer too briefly and lose marks.",
+points:['Answer in 2-4 sentences — never 1 word never a monologue','Use the Extend Formula: Answer → Reason → Example or Feeling','Vary your vocabulary — never repeat the same key word twice','Speak at a natural pace — slightly slower than normal is fine','Common topics: home family study/work hobbies food transport technology'],
+content:`<h5>The Extend Formula</h5><div class="rule"><strong>Question:</strong> "Do you enjoy cooking?"<br><br><strong>Band 4 (too short):</strong> "Yes, I like cooking."<br><br><strong>Band 6:</strong> "Yes, I enjoy cooking. I especially like making traditional Indonesian food. It relaxes me after a long day."<br><br><strong>Band 7:</strong> "Absolutely — it is something I find genuinely therapeutic. I particularly enjoy experimenting with local spices to recreate traditional recipes. There is a real sense of achievement when a dish turns out exactly right."</div><h5>Common Part 1 Topics — Prepare These</h5><div class="example">🏠 Your home and accommodation<br>👨‍👩‍👧 Family and relationships<br>📚 Study or work<br>🎵 Music films sports<br>🌳 Nature and outdoor activities<br>📱 Technology and social media<br>🚗 Transport and travel<br><br>For each topic prepare ONE extended answer of 3-4 sentences. You are not memorising — you are preparing material to draw from naturally.</div><div class="tip">✅ If you do not understand a question say "Could you repeat that please?" This is NOT penalised. Answering the wrong question IS penalised.</div>`,
+practice:{q:'An examiner asks: "Do you prefer spending time indoors or outdoors?" Which answer scores higher?',opts:['"Outdoors." (1 word)','I prefer outdoors because I like nature.','I tend to prefer spending time outdoors. I find that being in natural environments genuinely lifts my mood. There is something about fresh air and open space that I find energising in a way indoor environments rarely replicate.','Both are fine depending on the weather.'],ans:2,explain:"Option C is Band 7+. It gives a clear preference, explains WHY with detail, and uses varied vocabulary naturally. Options A and B are too short. Option D is vague and does not commit to a clear answer."}},
+
+{id:'s2',title:'Part 2 — The Cue Card Talk',badge:'High Value',bs:'background:#FEF3DC;color:#92400e',dur:'12 min',
+intro:"Part 2 is your 1-2 minute solo talk. You get 1 minute to prepare. Most students run dry at 45 seconds. Here is exactly how to fill 2 minutes confidently.",
+points:['Write 4-6 keyword bullets during your 1 minute prep — not full sentences','Follow the bullet points on the card — they are your structure','Open with a clear sentence: "I would like to talk about..."','Add sensory details: what you saw heard felt — this adds time naturally','Use time markers: "At first..." "After about ten minutes..." "By the end..."','If running dry: add comparisons feelings or hypotheticals'],
+content:`<h5>1-Minute Preparation Strategy</h5><div class="rule">During your prep minute write KEYWORDS only — not full sentences. Keywords trigger your memory without locking you into a script. Aim for 5-6 bullets covering: WHAT, WHEN/WHERE, HOW/WHO, FEELINGS, WHY IT MATTERED.</div><h5>Sample Cue Card and Time Plan</h5><div class="example"><strong>Cue Card:</strong> "Describe a time you learned something new."<br><br><strong>Prep keywords:</strong><br>• WHAT: swimming / 3 years ago<br>• WHERE: community pool Jakarta<br>• HOW: group lessons patient instructor<br>• FEELINGS: nervous → proud → confident<br>• WHY: safety fitness confidence<br><br><strong>Time plan:</strong><br>0:00–0:10 Opening sentence<br>0:10–0:35 WHAT — describe with details<br>0:35–1:00 WHERE — set the scene add sensory details<br>1:00–1:30 HOW — most detail here<br>1:30–1:55 FEELINGS and WHY<br>1:55–2:00 Brief wrap-up</div><div class="tip">✅ If you run dry before 2 minutes:<br>• Add a comparison: "Unlike before when I..."<br>• Add a feeling: "At that point I felt..."<br>• Add a hypothetical: "If I had not done this I think I would..."</div>`,
+practice:{q:'You get 1 minute to prepare for Part 2. What is the BEST way to use this time?',opts:['Write out your full answer word for word','Write 5-6 keyword bullets covering the main points on the card','Read the card slowly multiple times without writing anything','Plan only the opening sentence'],ans:1,explain:"Writing 5-6 keyword bullets is best. Full sentences take too long and create a script that sounds memorised. Keywords trigger natural speech. Reading without writing leaves you with nothing to refer to when your mind goes blank."}},
+
+{id:'s3',title:'Part 3 — Abstract Discussion',badge:'Band 7+',bs:'background:#EDE9FE;color:#5B21B6',dur:'10 min',
+intro:"Part 3 is where Band 7+ is won or lost. The examiner asks abstract questions about society and trends. They want a real discussion — not a brief answer. Extended discussion = higher fluency band.",
+points:['Part 3 is about society — not just your personal experience','Give your opinion clearly: "I firmly believe..." "In my view..."','Structure: opinion → reason → example → acknowledge the other view','Speculate when unsure: "I would imagine..." "It seems likely that..."','Discuss — add a second point compare challenge'],
+content:`<h5>Turning a Short Answer into Band 7</h5><div class="example"><strong>Question:</strong> "Do you think technology has changed the way people communicate?"<br><br><strong>Band 5:</strong> "Yes technology has changed communication a lot. People use phones and social media now."<br><br><strong>Band 7:</strong> "Undeniably so. I think the most significant shift has been from synchronous to asynchronous communication — people no longer need to be available at the same time to have a conversation. While this offers tremendous flexibility it arguably reduces the emotional depth of exchanges. I suppose it depends on how technology is used though — video calls can actually deepen connections across long distances in ways that were not possible a generation ago."</div><h5>Essential Part 3 Language</h5><div class="rule"><strong>Strong opinions:</strong> I firmly believe... / I would argue that...<br><strong>Hedged opinions:</strong> I imagine... / I suppose... / It seems likely that...<br><strong>Other views:</strong> Having said that... / On the other hand... / Some would argue...<br><strong>Buying time:</strong> That is an interesting question... / Well it is quite complex...<br><strong>Adding a point:</strong> Furthermore... / What is more... / Another dimension is...</div>`,
+practice:{q:'An examiner asks: "Do you think governments should invest more in public transport?" Which response shows best Part 3 technique?',opts:['"Yes they should."','"Yes because it reduces traffic and is good for the environment."','"I believe governments should absolutely prioritise public transport. Congested roads and rising emissions suggest current infrastructure is insufficient. That said the challenge is funding — many governments face competing priorities. I suppose the ideal would be a public-private partnership model though that comes with its own complexities."','"I am not sure. It depends on the country."'],ans:2,explain:"Option C demonstrates Band 7+ technique: clear opinion reasoning with evidence acknowledgement of a counter-argument speculation and awareness of complexity. Options A and B are too short. Option D is vague with no vocabulary range."}}
+],
+
+tips:[
+{id:'t1',title:'IELTS Band Descriptors — What Examiners Look For',badge:'Must Know',bs:'background:#DCFCE7;color:#166534',dur:'7 min',
+intro:"IELTS marks you on 4 criteria each worth 25% of your score. Understanding exactly what each criterion means helps you know precisely where to focus your effort.",
+points:['Task Achievement/Response — did you fully answer the question?','Coherence and Cohesion — logically organised and well-connected?','Lexical Resource — quality and range of vocabulary','Grammatical Range and Accuracy — variety and correctness','All 4 are equally weighted — neglecting any one costs you significantly'],
+content:`<h5>What Each Band Looks Like</h5><div class="rule"><strong>Task Achievement:</strong><br>Band 5: only partially addresses the task. Ideas underdeveloped.<br>Band 6: addresses task but some points not fully developed.<br>Band 7: all parts addressed. Clear position throughout. Ideas extended and supported.<br>Band 8: covers task fully. Ideas well-developed with relevant specific examples.</div><div class="rule"><strong>Coherence and Cohesion:</strong><br>Band 5: some organisation but lacks overall progression. Linking overused or wrong.<br>Band 6: generally organised. Some cohesive devices used correctly.<br>Band 7: logical progression. Linking used flexibly — not mechanically.<br>Band 8: seamless flow. Paragraphing used skillfully. Cohesion feels invisible.</div><div class="rule"><strong>Lexical Resource:</strong><br>Band 5: limited range. Repetitive vocabulary. Errors sometimes impede meaning.<br>Band 6: adequate range. Occasional errors in word choice.<br>Band 7: less common vocabulary used naturally. Occasional collocation inaccuracies.<br>Band 8: wide range with natural control. Rare errors only.</div><div class="rule"><strong>Grammatical Range and Accuracy:</strong><br>Band 5: limited range. Frequent errors especially with complex structures.<br>Band 6: mix of simple and complex sentences. Meaning generally clear.<br>Band 7: variety of complex structures. Most sentences accurate.<br>Band 8: wide range. Errors only in rare complex constructions.</div>`,
+practice:{q:'Which criterion is worth the MOST in IELTS Writing?',opts:['Coherence and Cohesion because organisation is most important','Lexical Resource because vocabulary is what examiners notice first','Grammatical Range because grammar is the foundation','All four criteria are equally weighted at 25% each'],ans:3,explain:"All four criteria are equally weighted at 25% each. This is a crucial fact many students do not know. Students who focus only on grammar often neglect Task Achievement or Coherence — and lose just as many marks."}},
+
+{id:'t2',title:'Top 10 Exam Day Strategies',badge:'Essential',bs:'background:#DCFCE7;color:#166534',dur:'6 min',
+intro:"These 10 strategies come from analysing thousands of IELTS results. Many students with strong English still lose bands on exam day from avoidable tactical mistakes.",
+points:['Use ALL reading time before each Listening section to predict','Never leave a Listening answer blank — always guess','Check word limits on every Listening and Reading answer','Reading: max 20 minutes per passage no exceptions','Writing: plan Task 2 for 5 minutes before writing — saves time overall'],
+content:`<h5>The 10 Strategies</h5><div class="rule"><strong>LISTENING:</strong><br>1. Use every second of reading time to predict answer types<br>2. If you miss an answer write a guess IMMEDIATELY and move on<br>3. Watch for number changes mid-sentence: "It is 45... actually 54"<br>4. Transfer answers carefully — check spelling</div><div class="rule"><strong>READING:</strong><br>5. Skim the passage for 90 seconds before reading questions<br>6. Never spend more than 90 seconds on one question — mark it move on<br>7. For True/False/NG — trust only the text not your knowledge<br>8. Answer EVERY question — there is NO penalty for wrong answers</div><div class="rule"><strong>WRITING:</strong><br>9. Task 1: Always write an Overview paragraph — this is the Band 7 marker<br>10. Task 2: Leave 4 minutes at the end to check subject-verb agreement articles and plurals</div><div class="tip">✅ Bonus strategy: Read your Task 2 essay backwards — last sentence first. This forces you to see individual sentences rather than your intended meaning making grammar errors easier to catch.</div>`,
+practice:{q:'In IELTS Reading what is the penalty for answering a question incorrectly?',opts:['Minus 1 mark per wrong answer','Minus half a mark per wrong answer','No penalty — wrong answers score 0 same as blank','Wrong answers score negative blank scores 0'],ans:2,explain:"There is NO penalty for wrong answers in IELTS. A wrong answer scores 0 — exactly the same as leaving it blank. This means you should ALWAYS guess if unsure. Never leave any answer blank."}}
+]};
+
+const PASSAGE=`The Science of Sleep and Memory
+
+Sleep has long been considered essential for physical restoration, but research over the past two decades has dramatically expanded our understanding of its role in cognitive function — particularly memory consolidation. Scientists now believe that the sleeping brain is far from inactive; it is engaged in complex processes critical for learning.
+
+During sleep, the brain cycles through two main phases: REM (Rapid Eye Movement) sleep and non-REM sleep. Non-REM stage 3, known as slow-wave or deep sleep, is when the brain consolidates declarative memories — those involving facts and events. During this stage, the hippocampus replays the day's experiences and transfers them to the neocortex for long-term storage. REM sleep plays a key role in procedural memory — skills and habits — and emotional memory processing.
+
+A landmark study by German researcher Jan Born in 2004 demonstrated that students who slept after learning a mathematical formula were twice as likely to discover a hidden shortcut compared to those who stayed awake. Sleep does not merely preserve memories — it actively reorganises and analyses them, leading to creative insights.
+
+The impact of sleep deprivation is equally significant. Research from the University of California found that adults sleeping fewer than six hours per night for two weeks performed as poorly on cognitive tests as those kept awake for 48 hours straight. Crucially, the sleep-deprived group did not perceive themselves as significantly impaired — a dangerous disconnect between actual and perceived performance.
+
+Modern neuroscience has also examined emotional memory. Disturbing memories are processed during REM sleep, when the neurochemical norepinephrine — associated with stress — is suppressed. This creates a neurochemical environment allowing emotional memories to be processed without the accompanying distress: the sleep to forget sleep to remember hypothesis.
+
+Educational institutions that shifted start times later have reported improved academic performance and reduced depression rates. Sleep researchers now broadly advocate treating adequate sleep not as a luxury but as a fundamental component of effective learning.`;
+
+const QUESTIONS=[
+{type:'tfng',q:'Slow-wave sleep is part of the REM phase of the sleep cycle.',ans:'FALSE',explain:'The passage states slow-wave sleep is non-REM stage 3 — NOT part of REM. These are two distinct phases.'},
+{type:'tfng',q:'The hippocampus transfers memories to the neocortex during deep sleep.',ans:'TRUE',explain:'Directly stated: "the hippocampus replays the day\'s experiences and transfers them to the neocortex for long-term storage" during non-REM stage 3 (deep sleep).'},
+{type:'tfng',q:'Jan Born\'s 2004 study involved participants learning a foreign language.',ans:'FALSE',explain:'The passage clearly states the study involved a mathematical formula, not a foreign language. Always check specific details.'},
+{type:'tfng',q:'Sleep-deprived individuals were aware of how impaired they were.',ans:'FALSE',explain:'The passage says they "did not perceive themselves as significantly impaired" — meaning they were NOT aware of their impairment. This is the "dangerous disconnect" mentioned.'},
+{type:'tfng',q:'The sleep to forget hypothesis involves suppression of a specific brain chemical.',ans:'TRUE',explain:'The passage names norepinephrine as the neurochemical that is suppressed during REM sleep — this is the mechanism behind the hypothesis.'},
+{type:'mcq',q:'What was the KEY finding of Jan Born\'s 2004 study?',opts:['Students who slept memorised formulas more quickly','Students who slept were twice as likely to find a shortcut in the problem','REM sleep is more important than deep sleep for mathematics','Sleep helps students remember vocabulary better'],ans:1,explain:'"Students who slept were twice as likely to discover a hidden shortcut" — the key finding was about INSIGHT and creative problem-solving, not just memorisation.'},
+{type:'mcq',q:'What does the University of California research primarily show?',opts:['Six hours of sleep is sufficient for most adults','Adults can accurately judge when they are sleep-deprived','Sleep deprivation impairs performance even when people feel fine','Students should sleep more than eight hours before exams'],ans:2,explain:'The critical finding was the disconnect between actual and perceived performance — people were severely cognitively impaired but felt relatively fine.'},
+{type:'mcq',q:'Why is norepinephrine suppression during REM sleep significant?',opts:['It makes emotionally charged memories permanently stronger','It allows emotional memories to be processed without reliving the distress','It prevents all negative memories from forming','It transfers emotional memories to the hippocampus'],ans:1,explain:'Norepinephrine suppression "allows emotional content to be processed without the accompanying distress" — this is the mechanism for emotional healing during sleep.'},
+{type:'short',q:'What are the TWO main phases of sleep mentioned in the passage? (write both)',ans:'REM and non-REM',explain:'Directly stated: "the brain cycles through two main phases: REM (Rapid Eye Movement) sleep and non-REM sleep."'},
+{type:'short',q:'What type of memory is primarily consolidated during slow-wave deep sleep?',ans:'declarative',explain:'The passage states: "slow-wave sleep is when the brain consolidates declarative memories — those involving facts and events."'}
+];
+
+const APP={tutor:localStorage.getItem('sp_tutor')||'maya',skill:'reading',openCard:null,chatHistory:[],ttsSpeaking:false,testState:null,testTimer:null,stats:JSON.parse(localStorage.getItem('sp_stats')||'{"tests":0,"lastScore":0}')};
+
+function GO(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showToast(msg){const t=document.getElementById('toast');t.innerHTML='⚠️ '+msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4000);}
+function pickTutor(k){APP.tutor=k;document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('on'));document.getElementById('pick-'+k).classList.add('on');}
+function confirmTutor(){localStorage.setItem('sp_tutor',APP.tutor);GO('dashboard');document.getElementById('d-name').textContent=TUTORS[APP.tutor].name+' — IELTS Tutor';}
+
+function buildAvatar(el,k){
+  const skin={maya:'#F0C8A0',alex:'#E8B88A',sari:'#F5C8A8'}[k];
+  const hair={maya:'#2C1810',alex:'#3D2B1A',sari:'#1C0A00'}[k];
+  const shirt=TUTORS[k].color;
+  el.innerHTML=`<div style="position:absolute;bottom:92px;left:7px;right:7px;height:30px;background:${hair};border-radius:50% 50% 15% 15%;"></div><div style="position:absolute;bottom:62px;left:10px;right:10px;height:52px;background:${skin};border-radius:50% 50% 42% 42%;"></div><div style="position:absolute;width:7px;height:6px;background:#1C0A00;border-radius:50%;bottom:84px;left:17px;"></div><div style="position:absolute;width:7px;height:6px;background:#1C0A00;border-radius:50%;bottom:84px;right:17px;"></div><div class="av-mouth" style="position:absolute;bottom:68px;left:50%;transform:translateX(-50%);width:12px;height:4px;background:#9B4030;border-radius:0 0 7px 7px;"></div><div style="position:absolute;bottom:52px;left:28px;right:28px;height:12px;background:${skin};border-radius:4px;"></div><div style="position:absolute;bottom:0;left:6px;right:6px;height:56px;background:${shirt};border-radius:10px 10px 5px 5px;"></div><div style="position:absolute;bottom:4px;left:-3px;width:12px;height:40px;background:${shirt};border-radius:6px;transform:rotate(-5deg);transform-origin:top center;"></div><div style="position:absolute;bottom:4px;right:-3px;width:12px;height:40px;background:${shirt};border-radius:6px;transform:rotate(5deg);transform-origin:top center;"></div>`;
 }
 
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.innerHTML = '⚠️ ' + msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3500);
-}
+const TABS=['reading','writing','listening','speaking','tips'];
+const TL={reading:'📖 Reading',writing:'✍️ Writing',listening:'🎧 Listening',speaking:'🗣️ Speaking',tips:'💡 Tips'};
 
-// ─── TUTOR SELECT ────────────────────────────────────────
-function renderTutorPicks() {
-  const el = document.getElementById('tpicks');
-  el.innerHTML = Object.entries(TUTORS).map(([k, t]) =>
-    `<div class="tcard ${APP.tutor===k?'on':''}" id="pick-${k}" onclick="pickTutor('${k}')">
-      <div class="tav" style="background:${t.soft}">${t.emoji}</div>
-      <div><div class="tc-name">${t.name}</div><div class="tc-role" style="color:${t.color}">${t.role}</div><div class="tc-desc">${getDesc(k)}</div></div>
-    </div>`
-  ).join('');
-}
-
-function getDesc(k) {
-  return {maya:'Methodical and thorough. Step-by-step explanations with academic depth. Best for deep understanding.',
-    alex:'High-energy and strategic. Exam tactics and shortcuts. Best for fast score improvement.',
-    sari:'Warm and encouraging. Gentle explanations that build real confidence. Best for anxious students.'}[k];
-}
-
-function pickTutor(k) {
-  APP.tutor = k;
-  document.querySelectorAll('.tcard').forEach(c => c.classList.remove('on'));
-  document.getElementById('pick-'+k).classList.add('on');
-}
-
-function confirmTutor() {
-  localStorage.setItem('tutor', APP.tutor);
-  GO('dashboard');
-}
-
-// ─── DASHBOARD ──────────────────────────────────────────
-function renderDashboard() {
-  const t = TUTORS[APP.tutor];
-  document.getElementById('d-name').textContent = t.name + ' — IELTS Tutor';
-}
-
-// ─── BUILD AVATAR ────────────────────────────────────────
-function buildAvatar(el, tutorKey) {
-  const t = TUTORS[tutorKey];
-  const c = t.color, sc = t.soft;
-  const skin = {maya:'#F0C8A0', alex:'#E8B88A', sari:'#F5C8A8'}[tutorKey];
-  const hair = {maya:'#2C1810', alex:'#3D2B1A', sari:'#1C0A00'}[tutorKey];
-  el.className = 'av-fig ' + tutorKey;
-  el.innerHTML = `
-    <div class="av-hair" style="background:${hair};position:absolute;bottom:90px;left:8px;right:8px;height:30px;border-radius:50% 50% 15% 15%;"></div>
-    <div class="av-head" style="background:${skin}"></div>
-    <div class="av-eye av-el" style="background:#1C0A00"></div>
-    <div class="av-eye av-er" style="background:#1C0A00"></div>
-    <div class="av-mouth"></div>
-    <div class="av-neck" style="background:${skin}"></div>
-    <div class="av-body" style="background:${c}"></div>
-    <div class="av-al" style="background:${c}"></div>
-    <div class="av-ar" style="background:${c}"></div>`;
-}
-
-// ─── LESSON ─────────────────────────────────────────────
-const SKILL_TABS = ['reading','writing','listening','speaking','tips'];
-const SKILL_LABELS = {reading:'📖 Reading',writing:'✍️ Writing',listening:'🎧 Listening',speaking:'🗣️ Speaking',tips:'💡 Tips'};
-
-function openSkill(skill) {
-  APP.skill = skill;
-  APP.openCard = null;
+function openSkill(skill){
+  APP.skill=skill;APP.openCard=null;
   GO('lesson');
-  const t = TUTORS[APP.tutor];
-  document.getElementById('l-title').textContent = SKILL_LABELS[skill];
-  document.getElementById('b-name').textContent = t.name;
-  document.getElementById('b-text').textContent = t.greet;
-  buildAvatar(document.getElementById('l-avatar'), APP.tutor);
-  renderLessonTabs();
-  renderLessons(skill);
-  // Animate whiteboard with lesson overview
-  const lessons = LESSONS[skill];
-  if (lessons && lessons.length) {
-    showWhiteboard(lessons[0].points);
-  }
+  const t=TUTORS[APP.tutor];
+  document.getElementById('l-title').textContent=TL[skill];
+  document.getElementById('b-name').textContent=t.name;
+  document.getElementById('b-text').textContent=t.greet;
+  buildAvatar(document.getElementById('l-avatar'),APP.tutor);
+  renderTabs();renderCards(skill);
+  const first=LESSONS[skill][0];
+  if(first)showWhiteboard(first.points);
 }
 
-function renderLessonTabs() {
-  document.getElementById('l-tabs').innerHTML = SKILL_TABS.map(s =>
-    `<div class="lt ${s===APP.skill?'on':''}" onclick="switchSkillTab('${s}')">${SKILL_LABELS[s]}</div>`
-  ).join('');
+function renderTabs(){
+  document.getElementById('l-tabs').innerHTML=TABS.map(s=>`<div class="lt ${s===APP.skill?'on':''}" onclick="switchTab('${s}')">${TL[s]}</div>`).join('');
 }
 
-function switchSkillTab(skill) {
-  APP.skill = skill;
-  APP.openCard = null;
-  document.getElementById('l-title').textContent = SKILL_LABELS[skill];
-  const t = TUTORS[APP.tutor];
-  document.getElementById('b-text').textContent = LESSONS[skill][0]?.intro || t.greet;
-  renderLessonTabs();
-  renderLessons(skill);
-  if (LESSONS[skill][0]) showWhiteboard(LESSONS[skill][0].points);
+function switchTab(skill){
+  APP.skill=skill;APP.openCard=null;
+  document.getElementById('l-title').textContent=TL[skill];
+  document.getElementById('b-text').textContent=TUTORS[APP.tutor].greet;
+  renderTabs();renderCards(skill);
+  const first=LESSONS[skill][0];
+  if(first)showWhiteboard(first.points);
 }
 
-function renderLessons(skill) {
-  const data = LESSONS[skill] || [];
-  const badgeColors = {'Foundation':'background:#E8F1FB;color:#1A4FA0','High Value':'background:#FEF3DC;color:#92400e','Must Know':'background:#DCFCE7;color:#166534','Band 7+':'background:#EDE9FE;color:#5B21B6','Key Skill':'background:#E0F9F7;color:#134E4A','Technique':'background:#FEE2E0;color:#9B1C1C','Score Boost':'background:#FEF3DC;color:#92400e','Academic':'background:#E8F1FB;color:#1A4FA0','Overview':'background:#F3F4F6;color:#374151','Speed Skills':'background:#E0F9F7;color:#134E4A','Structure':'background:#EDE9FE;color:#5B21B6','Essential':'background:#DCFCE7;color:#166534'};
-  document.getElementById('l-area').innerHTML = data.map(lesson => `
-    <div class="lc" id="lc-${lesson.id}">
-      <h4>${lesson.title}</h4>
-      <p>${lesson.intro}</p>
-      <div class="lcm">
-        <span class="lbadge" style="${badgeColors[lesson.badge]||'background:#F3F4F6;color:#374151'}">${lesson.badge}</span>
-        <span style="font-size:11px;color:var(--muted)">⏱ ${lesson.dur}</span>
-      </div>
-      <div class="lc-body" id="body-${lesson.id}">
-        <div class="lbody" style="padding-top:12px">${lesson.content}</div>
-        ${renderPracticeQuestions(lesson)}
-        <button class="btn btn-blue" style="margin-top:14px;font-size:13px;padding:12px" onclick="chatAbout('${lesson.id}')">💬 Ask ${TUTORS[APP.tutor].name} About This Topic</button>
-      </div>
-    </div>`).join('');
+function getAllLessons(){return Object.values(LESSONS).flat();}
+
+function renderCards(skill){
+  const lessons=LESSONS[skill]||[];
+  if(!lessons.length){document.getElementById('l-area').innerHTML='<div style="padding:20px;text-align:center;color:var(--muted)">No lessons yet.</div>';return;}
+  document.getElementById('l-area').innerHTML=lessons.map(L=>`
+<div class="lcard" id="lcard-${L.id}">
+  <div class="lcard-hdr" onclick="toggleCard('${L.id}')">
+    <h4>${L.title}</h4><p>${L.intro}</p>
+    <div class="lcard-meta"><span class="lbadge" style="${L.bs}">${L.badge}</span><span style="font-size:11px;color:var(--muted)">⏱ ${L.dur} &nbsp;<span id="arr-${L.id}">▼</span></span></div>
+  </div>
+  <div class="lcard-body" id="body-${L.id}">
+    <div class="lbody">${L.content}</div>
+    ${L.practice?renderPractice(L):''}
+    <button class="ask-tutor-btn" onclick="chatFromLesson('${L.id}')">💬 Discuss with ${TUTORS[APP.tutor].name}</button>
+  </div>
+</div>`).join('');
 }
 
-function renderPracticeQuestions(lesson) {
-  if (!lesson.practice) return '';
-  return `<div class="pq"><div class="pq-t">✏️ Practice Question</div>
-    ${lesson.practice.map((pq,i) => {
-      if (pq.type === 'mcq') {
-        return `<p style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">${pq.q}</p>
-          ${pq.opts.map((o,j) => `<button class="popt" id="popt-${lesson.id}-${i}-${j}" onclick="checkPractice('${lesson.id}',${i},${j},${pq.ans},'${escStr(pq.explain)}')">${o}</button>`).join('')}
-          <div class="pexp" id="pexp-${lesson.id}-${i}"></div>`;
-      }
-      return '';
-    }).join('')}
-  </div>`;
-}
-
-function escStr(s) { return s.replace(/'/g,"&#39;"); }
-
-function checkPractice(lid, qi, chosen, correct, explain) {
-  const opts = document.querySelectorAll(`[id^="popt-${lid}-${qi}-"]`);
-  opts.forEach((o,j) => {
-    o.classList.remove('sel','correct','wrong');
-    if (j === correct) o.classList.add('correct');
-    else if (j === chosen) o.classList.add('wrong');
-    o.disabled = true;
-  });
-  if (chosen === correct) {
-    const el = document.getElementById(`pexp-${lid}-${qi}`);
-    el.innerHTML = '✅ Correct! ' + explain.replace(/&#39;/g,"'");
-    el.classList.add('show');
-  } else {
-    const el = document.getElementById(`pexp-${lid}-${qi}`);
-    el.innerHTML = '❌ Not quite. ' + explain.replace(/&#39;/g,"'");
-    el.classList.add('show');
-  }
-}
-
-// Toggle lesson card open/close
-document.addEventListener('click', function(e) {
-  const lc = e.target.closest('.lc');
-  if (!lc || e.target.closest('.lc-body') || e.target.tagName === 'BUTTON') return;
-  const id = lc.id.replace('lc-','');
-  const body = document.getElementById('body-'+id);
-  if (!body) return;
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.lc-body').forEach(b => b.classList.remove('open'));
-  if (!isOpen) {
+function toggleCard(id){
+  const body=document.getElementById('body-'+id);
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.lcard-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('[id^="arr-"]').forEach(a=>a.textContent='▼');
+  if(!isOpen){
     body.classList.add('open');
-    APP.openCard = id;
-    // Find lesson and update stage
-    const lesson = Object.values(LESSONS).flat().find(l => l.id === id);
-    if (lesson) {
-      speakBubble(lesson.intro);
-      showWhiteboard(lesson.points);
-    }
+    const arr=document.getElementById('arr-'+id);
+    if(arr)arr.textContent='▲';
+    APP.openCard=id;
+    const lesson=getAllLessons().find(l=>l.id===id);
+    if(lesson){setBubble(lesson.intro);showWhiteboard(lesson.points);}
+    setTimeout(()=>document.getElementById('lcard-'+id)?.scrollIntoView({behavior:'smooth',block:'start'}),100);
   }
-});
-
-function showWhiteboard(points) {
-  const el = document.getElementById('wb-pts');
-  el.innerHTML = points.map((p,i) => `<div class="wbp" id="wb-${i}"><div class="wbn">${i+1}</div><div class="wbpt">${p}</div></div>`).join('');
-  points.forEach((_,i) => setTimeout(() => document.getElementById('wb-'+i)?.classList.add('show'), i*150+100));
 }
 
-function speakBubble(text) {
+function renderPractice(L){
+  const p=L.practice;
+  return `<div class="pq-box"><div class="pq-title">✏️ Practice Question</div><div class="pq-text">${p.q}</div>${p.opts.map((o,i)=>`<button class="popt" id="po-${L.id}-${i}" onclick="checkAns('${L.id}',${i},${p.ans},'${p.explain.replace(/'/g,"&#39;")}')">`+`<span class="pol">${['A','B','C','D'][i]}</span>${o}</button>`).join('')}<div class="pexp" id="pe-${L.id}"></div></div>`;
+}
+
+function checkAns(lid,chosen,correct,explain){
+  const opts=document.querySelectorAll(`[id^="po-${lid}-"]`);
+  opts.forEach((o,i)=>{o.disabled=true;if(i===correct)o.classList.add('correct');else if(i===chosen)o.classList.add('wrong');});
+  const exp=document.getElementById('pe-'+lid);
+  exp.innerHTML=(chosen===correct?'✅ Correct! ':'❌ Not quite. ')+explain.replace(/&#39;/g,"'");
+  exp.classList.add('show');
+}
+
+function showWhiteboard(points){
+  const el=document.getElementById('wb-pts');
+  el.innerHTML=points.map((p,i)=>`<div class="wbp" id="wb-${i}"><div class="wbn">${i+1}</div><div class="wbpt">${p}</div></div>`).join('');
+  points.forEach((_,i)=>setTimeout(()=>document.getElementById('wb-'+i)?.classList.add('show'),i*120+80));
+}
+
+function setBubble(text){
   stopTTS();
-  const btxt = document.getElementById('b-text');
-  const dots = document.getElementById('b-dots');
-  const stage = document.getElementById('l-stage');
-  btxt.textContent = '';
-  dots.style.display = 'flex';
-  stage.classList.add('talking');
-  setTimeout(() => {
-    dots.style.display = 'none';
-    stage.classList.remove('talking');
-    btxt.textContent = text;
-    startTTS(text);
-  }, 800);
+  const btxt=document.getElementById('b-text');
+  const dots=document.getElementById('b-dots');
+  const stage=document.getElementById('l-stage');
+  btxt.textContent='';dots.style.display='flex';stage.classList.add('talking');
+  setTimeout(()=>{dots.style.display='none';stage.classList.remove('talking');btxt.textContent=text;startTTS(text);},700);
 }
 
-// ─── TTS ─────────────────────────────────────────────────
-function startTTS(text) {
-  if (!('speechSynthesis' in window)) return;
+function startTTS(text){
+  if(!('speechSynthesis' in window))return;
   stopTTS();
-  APP.ttsUtterance = new SpeechSynthesisUtterance(text);
-  APP.ttsUtterance.lang = 'en-GB';
-  APP.ttsUtterance.rate = 0.92;
-  APP.ttsUtterance.pitch = APP.tutor === 'alex' ? 1.1 : (APP.tutor === 'sari' ? 0.9 : 1.0);
-  const stage = document.getElementById('l-stage');
-  APP.ttsUtterance.onstart = () => { APP.ttsSpeaking = true; stage.classList.add('talking'); };
-  APP.ttsUtterance.onend = () => { APP.ttsSpeaking = false; stage.classList.remove('talking'); };
-  window.speechSynthesis.speak(APP.ttsUtterance);
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-GB';u.rate=0.9;u.pitch=APP.tutor==='alex'?1.1:APP.tutor==='sari'?0.9:1.0;
+  u.onstart=()=>{APP.ttsSpeaking=true;document.getElementById('l-stage')?.classList.add('talking');};
+  u.onend=()=>{APP.ttsSpeaking=false;document.getElementById('l-stage')?.classList.remove('talking');};
+  window.speechSynthesis.speak(u);
 }
+function stopTTS(){if('speechSynthesis' in window)window.speechSynthesis.cancel();APP.ttsSpeaking=false;document.getElementById('l-stage')?.classList.remove('talking');}
+function toggleTTS(){if(APP.ttsSpeaking)stopTTS();else startTTS(document.getElementById('b-text').textContent);}
 
-function stopTTS() {
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  APP.ttsSpeaking = false;
-  document.getElementById('l-stage')?.classList.remove('talking');
-}
-
-function toggleTTS() {
-  const txt = document.getElementById('b-text').textContent;
-  if (APP.ttsSpeaking) { stopTTS(); document.getElementById('tts-btn').textContent = '🔊 Speak'; }
-  else { startTTS(txt); document.getElementById('tts-btn').textContent = '⏹ Stop'; }
-}
-
-// ─── MOCK TEST ───────────────────────────────────────────
-function startTest() {
+function startTest(){
   GO('test');
-  const qs = MOCK_TEST.questions;
-  APP.testState = { qi: 0, answers: new Array(qs.length).fill(null), revealed: new Array(qs.length).fill(false), done: false };
+  APP.testState={qi:0,answers:new Array(QUESTIONS.length).fill(null),revealed:new Array(QUESTIONS.length).fill(false),done:false,score:0};
   clearInterval(APP.testTimer);
-  let secs = MOCK_TEST.time * 60;
-  APP.testTimer = setInterval(() => {
+  let secs=20*60;
+  APP.testTimer=setInterval(()=>{
     secs--;
-    const m = Math.floor(secs/60), s = secs%60;
-    document.getElementById('t-timer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    if (secs <= 0) { clearInterval(APP.testTimer); submitTest(); }
-  }, 1000);
-  renderTestQuestion();
+    const m=Math.floor(secs/60),s=secs%60;
+    const el=document.getElementById('t-timer');
+    if(el)el.textContent=m+':'+(s<10?'0':'')+s;
+    if(secs<=0){clearInterval(APP.testTimer);submitTest();}
+  },1000);
+  renderQ();
 }
 
-function renderTestQuestion() {
-  const { qi, answers, revealed, done } = APP.testState;
-  const qs = MOCK_TEST.questions;
-  document.getElementById('t-sec').textContent = done ? 'Results' : `Question ${qi+1} of ${qs.length}`;
-  // dots
-  document.getElementById('t-dots').innerHTML = qs.map((_,i) =>
-    `<div class="tdot ${answers[i]!==null?'ans':''} ${i===qi&&!done?'cur':''}"></div>`).join('');
-  if (done) { renderResults(); return; }
-  const q = qs[qi];
-  let html = '';
-  if (q.type === 'tfng') {
-    html = `<div class="qnum">Question ${qi+1} — True / False / Not Given</div>
-      <div class="qpassage" style="font-size:12px;max-height:120px;overflow-y:auto">${MOCK_TEST.passage.substring(0,600)}...</div>
-      <div class="qtext">"${q.q}"</div>
-      <div class="opts">
-        ${['TRUE','FALSE','NOT GIVEN'].map((o,i) => `<button class="opt ${answers[qi]===o?'sel':''} ${revealed[qi]?(o===q.ans?'correct':(answers[qi]===o?'wrong':'')):''}
-          " onclick="selectAnswer('${o}')">${o}</button>`).join('')}
-      </div>
-      <div class="exp-box ${revealed[qi]?'show':''}" id="exp-box"><div class="exp-lbl">📖 Explanation</div><div class="exp-txt">${q.explain}</div></div>`;
-  } else if (q.type === 'mcq') {
-    html = `<div class="qnum">Question ${qi+1} — Multiple Choice</div>
-      <div class="qtext">${q.q}</div>
-      <div class="opts">
-        ${q.opts.map((o,i) => `<button class="opt ${answers[qi]===i?'sel':''} ${revealed[qi]?(i===q.ans?'correct':(answers[qi]===i?'wrong':'')):''}
-          " onclick="selectAnswer(${i})"><div class="ol">${['A','B','C','D'][i]}</div>${o}</button>`).join('')}
-      </div>
-      <div class="exp-box ${revealed[qi]?'show':''}" id="exp-box"><div class="exp-lbl">📖 Explanation</div><div class="exp-txt">${q.explain}</div></div>`;
-  } else {
-    html = `<div class="qnum">Question ${qi+1} — Short Answer</div>
-      <div class="qtext">${q.q}</div>
-      <input class="short-inp" id="short-in" placeholder="Write your answer here..." value="${answers[qi]||''}" oninput="APP.testState.answers[${qi}]=this.value"/>
-      <div class="exp-box ${revealed[qi]?'show':''}" id="exp-box"><div class="exp-lbl">📖 Answer: ${q.ans}</div><div class="exp-txt">${q.explain}</div></div>`;
+function renderQ(){
+  const s=APP.testState;
+  if(s.done){renderResults();return;}
+  const q=QUESTIONS[s.qi];
+  document.getElementById('t-sec').textContent='Question '+(s.qi+1)+' of '+QUESTIONS.length;
+  document.getElementById('t-dots').innerHTML=QUESTIONS.map((_,i)=>'<div class="tdot'+(s.answers[i]!==null?' done':'')+(i===s.qi?' cur':'')+'"></div>').join('');
+  let html='<div class="qnum">Question '+(s.qi+1)+' — ';
+  if(q.type==='tfng'){
+    html+='True / False / Not Given</div>';
+    html+='<div class="qpassage" style="max-height:130px;overflow-y:auto;font-size:12px">'+PASSAGE.replace(/\n\n/g,'<br><br>').substring(0,900)+'...</div>';
+    html+='<div class="qtext">"'+q.q+'"</div><div class="topts">';
+    ['TRUE','FALSE','NOT GIVEN'].forEach(opt=>{
+      let cls='topt';
+      if(s.answers[s.qi]===opt)cls+=' sel';
+      if(s.revealed[s.qi]){if(opt===q.ans)cls+=' correct';else if(s.answers[s.qi]===opt)cls+=' wrong';}
+      html+='<button class="'+cls+'" onclick="selAns(\''+opt+'\')">'+opt+'</button>';
+    });
+    html+='</div>';
+  }else if(q.type==='mcq'){
+    html+='Multiple Choice</div>';
+    html+='<div class="qtext">'+q.q+'</div><div class="topts">';
+    q.opts.forEach((opt,i)=>{
+      let cls='topt';
+      if(s.answers[s.qi]===i)cls+=' sel';
+      if(s.revealed[s.qi]){if(i===q.ans)cls+=' correct';else if(s.answers[s.qi]===i)cls+=' wrong';}
+      html+='<button class="'+cls+'" onclick="selAns('+i+')"><div class="tol">'+['A','B','C','D'][i]+'</div>'+opt+'</button>';
+    });
+    html+='</div>';
+  }else{
+    html+='Short Answer</div>';
+    html+='<div class="qtext">'+q.q+'</div>';
+    html+='<input class="shortinp" id="sinp" placeholder="Type your answer here..." value="'+(s.answers[s.qi]||'')+'" oninput="APP.testState.answers[APP.testState.qi]=this.value"/>';
   }
-  document.getElementById('t-content').innerHTML = html;
-  // nav buttons
-  const isLast = qi === qs.length - 1;
-  document.getElementById('t-nav').innerHTML =
-    `${qi>0?'<button class="prev" onclick="testNav(-1)">← Previous</button>':''}
-     ${!revealed[qi]?`<button class="next" onclick="revealAnswer()">Check Answer</button>`:''}
-     ${revealed[qi]&&!isLast?'<button class="next" onclick="testNav(1)">Next →</button>':''}
-     ${isLast?'<button class="submit" onclick="submitTest()">Submit Test ✓</button>':''}`;
+  if(s.revealed[s.qi]){
+    html+='<div class="expbox show"><div class="explbl">📖 Explanation</div><div class="exptxt">';
+    if(q.type==='short')html+='<strong>Correct answer: '+q.ans+'</strong><br><br>';
+    html+=q.explain+'</div></div>';
+  }
+  document.getElementById('t-content').innerHTML=html;
+  let nav='';
+  if(s.qi>0)nav+='<button class="btn-prev" onclick="tNav(-1)">← Prev</button>';
+  if(!s.revealed[s.qi]&&s.answers[s.qi]!==null)nav+='<button class="btn-check" onclick="revealQ()">Check ✓</button>';
+  if(s.revealed[s.qi]&&s.qi<QUESTIONS.length-1)nav+='<button class="btn-next" onclick="tNav(1)">Next →</button>';
+  if(s.qi===QUESTIONS.length-1)nav+='<button class="btn-submit" onclick="submitTest()">Submit Test</button>';
+  document.getElementById('t-nav').innerHTML=nav;
 }
 
-function selectAnswer(val) {
-  APP.testState.answers[APP.testState.qi] = val;
-  renderTestQuestion();
-}
+function selAns(val){APP.testState.answers[APP.testState.qi]=val;renderQ();}
+function revealQ(){APP.testState.revealed[APP.testState.qi]=true;renderQ();}
+function tNav(dir){APP.testState.qi=Math.max(0,Math.min(QUESTIONS.length-1,APP.testState.qi+dir));renderQ();}
 
-function revealAnswer() {
-  APP.testState.revealed[APP.testState.qi] = true;
-  renderTestQuestion();
-}
-
-function testNav(dir) {
-  APP.testState.qi = Math.max(0, Math.min(MOCK_TEST.questions.length-1, APP.testState.qi + dir));
-  renderTestQuestion();
-}
-
-function submitTest() {
+function submitTest(){
   clearInterval(APP.testTimer);
-  APP.testState.done = true;
-  const qs = MOCK_TEST.questions;
-  const { answers } = APP.testState;
-  let correct = 0;
-  qs.forEach((q,i) => {
-    if (q.type === 'tfng' && answers[i] === q.ans) correct++;
-    else if (q.type === 'mcq' && answers[i] === q.ans) correct++;
-    else if (q.type === 'short' && answers[i] && answers[i].toLowerCase().includes(q.ans.toLowerCase())) correct++;
+  let correct=0;
+  QUESTIONS.forEach((q,i)=>{
+    const a=APP.testState.answers[i];
+    if(q.type==='tfng'&&a===q.ans)correct++;
+    else if(q.type==='mcq'&&a===q.ans)correct++;
+    else if(q.type==='short'&&a&&a.toLowerCase().includes(q.ans.toLowerCase()))correct++;
   });
-  APP.testState.score = correct;
-  APP.stats.tests++;
-  APP.stats.lastScore = correct;
-  localStorage.setItem('stats', JSON.stringify(APP.stats));
+  APP.testState.score=correct;APP.testState.done=true;
+  APP.stats.tests++;APP.stats.lastScore=correct;
+  localStorage.setItem('sp_stats',JSON.stringify(APP.stats));
   renderResults();
 }
 
-function renderResults() {
-  const { score } = APP.testState;
-  const qs = MOCK_TEST.questions;
-  const pct = Math.round(score/qs.length*100);
-  const band = score <= 3 ? 5.0 : score <= 5 ? 5.5 : score <= 7 ? 6.0 : score <= 8 ? 6.5 : 7.0;
-  document.getElementById('t-sec').textContent = 'Test Complete';
-  document.getElementById('t-timer').textContent = 'Done';
-  document.getElementById('t-dots').innerHTML = '';
-  document.getElementById('t-nav').innerHTML = `<button class="next" style="flex:1" onclick="GO('dashboard')">Back to Dashboard</button><button class="submit" style="flex:1" onclick="startTest()">Retry Test</button>`;
-  document.getElementById('t-content').innerHTML = `
-    <div class="results">
-      <div class="rb"><div class="rb-n">${score}/${qs.length}</div><div class="rb-l">${pct}%</div></div>
-      <div class="rs-title">Est. Band: ${band}</div>
-      <div class="rs-sub">${score>=8?'Excellent! You\'re on track for Band 7+.':score>=6?'Good progress! Focus on the questions you missed.':'Keep practising. Review the explanations and retry.'}</div>
-      ${qs.map((q,i) => {
-        const { answers } = APP.testState;
-        const correct = q.type==='tfng'?answers[i]===q.ans:q.type==='mcq'?answers[i]===q.ans:answers[i]&&answers[i].toLowerCase().includes(q.ans.toLowerCase());
-        return `<div class="qr-row"><div class="qr-icon">${correct?'✅':'❌'}</div><div><div class="qr-q">Q${i+1}: ${q.q.substring(0,60)}${q.q.length>60?'...':''}</div><div class="qr-e">${correct?'Correct':'Correct answer: '+q.ans} — ${q.explain}</div></div></div>`;
-      }).join('')}
-    </div>`;
-}
-
-// ─── CHAT ────────────────────────────────────────────────
-function openChat(topic) {
-  GO('chat');
-  const t = TUTORS[APP.tutor];
-  document.getElementById('chat-title').textContent = 'Chat with ' + t.name;
-  if (APP.chatHistory.length === 0) {
-    addChatMsg('ai', t.name, t.greet);
-  }
-  renderSuggestions(topic);
-}
-
-function chatAbout(lessonId) {
-  const lesson = Object.values(LESSONS).flat().find(l => l.id === lessonId);
-  if (!lesson) return;
-  APP.skill = lessonId;
-  openChat(lesson.title);
-}
-
-function renderSuggestions(topic) {
-  const sug = topic ? [
-    `Explain ${topic} in simple terms`,
-    `Give me an example of ${topic}`,
-    `What are common mistakes with ${topic}?`,
-    `How does ${topic} affect my band score?`
-  ] : [
-    'How do I improve my Reading band?',
-    'What are the most common Writing mistakes?',
-    'How do I speak more fluently in Part 3?',
-    'What is True/False/Not Given?',
-    'How do I write a Band 7 essay introduction?',
-    'Tips for IELTS Listening Section 4?'
-  ];
-  document.getElementById('chat-sug').innerHTML = sug.map(s =>
-    `<button class="cs" onclick="sendSuggestion('${escStr(s)}')">${s}</button>`).join('');
-}
-
-function sendSuggestion(text) {
-  document.getElementById('chat-in').value = text.replace(/&#39;/g,"'");
-  sendChat();
-}
-
-function addChatMsg(role, name, text) {
-  const t = TUTORS[APP.tutor];
-  const msgs = document.getElementById('chat-msgs');
-  const div = document.createElement('div');
-  div.className = 'cmsg ' + role;
-  div.innerHTML = `
-    <div class="cav" style="background:${role==='ai'?t.color:'#8FA0BC'}">${role==='ai'?t.emoji:'👤'}</div>
-    <div class="cbody"><div class="cname">${name}</div><div class="cbub">${text}</div></div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function addTyping() {
-  const msgs = document.getElementById('chat-msgs');
-  const div = document.createElement('div');
-  div.className = 'cmsg ai'; div.id = 'typing-indicator';
-  div.innerHTML = `<div class="cav" style="background:${TUTORS[APP.tutor].color}">${TUTORS[APP.tutor].emoji}</div>
-    <div class="cbody"><div class="typing"><div class="tb2"></div><div class="tb2"></div><div class="tb2"></div></div></div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-async function sendChat() {
-  const inp = document.getElementById('chat-in');
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value = '';
-  inp.style.height = 'auto';
-  addChatMsg('user', 'You', text);
-  APP.chatHistory.push({ role: 'user', content: text });
-  addTyping();
-  try {
-    const t = TUTORS[APP.tutor];
-    const lessonContext = APP.openCard ? Object.values(LESSONS).flat().find(l=>l.id===APP.openCard)?.title || '' : '';
-    const system = t.system.replace('{LESSON}', lessonContext || 'General IELTS preparation');
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: APP.chatHistory.slice(-8), system })
-    });
-    document.getElementById('typing-indicator')?.remove();
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || `Server error ${res.status}`);
-    }
-    const data = await res.json();
-    const reply = data.text || 'Sorry, I did not get a response.';
-    APP.chatHistory.push({ role: 'assistant', content: reply });
-    addChatMsg('ai', t.name, reply);
-  } catch (err) {
-    document.getElementById('typing-indicator')?.remove();
-    const errMsg = err.message.includes('API key') ? err.message :
-      err.message.includes('Failed to fetch') ? 'Cannot reach the server. Check your internet connection.' :
-      'Error: ' + err.message + '. Make sure ANTHROPIC_API_KEY is set in Vercel → Settings → Environment Variables.';
-    addChatMsg('ai', '⚠️ Error', errMsg);
-    toast(err.message.substring(0,80));
-  }
-}
-
-// Enter to send
-document.getElementById('chat-in').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-});
-
-// Auto-resize textarea
-document.getElementById('chat-in').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 80) + 'px';
-});
-
-// ─── PROGRESS ────────────────────────────────────────────
-function animBars() {
-  document.querySelectorAll('.brf').forEach(b => {
-    const w = b.dataset.w;
-    setTimeout(() => { b.style.width = w + '%'; }, 100);
+function renderResults(){
+  clearInterval(APP.testTimer);
+  const score=APP.testState.score,total=QUESTIONS.length;
+  const pct=Math.round(score/total*100);
+  const band=score<=3?'5.0':score<=5?'5.5':score<=7?'6.0':score<=8?'6.5':'7.0+';
+  const msg=score>=8?'Excellent! You are on track for Band 7+.':score>=6?'Good progress! Review the questions you missed.':'Keep practising. Read each explanation carefully and retry.';
+  document.getElementById('t-sec').textContent='Test Complete';
+  document.getElementById('t-timer').textContent='✓ Done';
+  document.getElementById('t-dots').innerHTML='';
+  document.getElementById('t-nav').innerHTML='<button class="btn-prev" onclick="GO(\'dashboard\')">← Dashboard</button><button class="btn-submit" onclick="startTest()">Retry Test</button>';
+  let html='<div class="results"><div class="res-circle"><div class="res-n">'+score+'/'+total+'</div><div class="res-l">'+pct+'%</div></div><div class="res-title">Estimated Band: '+band+'</div><div class="res-sub">'+msg+'</div>';
+  QUESTIONS.forEach((q,i)=>{
+    const a=APP.testState.answers[i];
+    const ok=q.type==='tfng'?a===q.ans:q.type==='mcq'?a===q.ans:(a&&a.toLowerCase().includes(q.ans.toLowerCase()));
+    html+='<div class="qr-row"><div style="font-size:16px">'+(ok?'✅':'❌')+'</div><div><div class="qr-q">Q'+(i+1)+': '+q.q.substring(0,70)+(q.q.length>70?'...':'')+'</div><div class="qr-e">'+(ok?'Correct. ':'Answer: <strong>'+q.ans+'</strong>. ')+q.explain+'</div></div></div>';
   });
-  document.getElementById('p-band').textContent = '5.5';
-  document.getElementById('p-done').textContent = APP.stats.lessons;
-  document.getElementById('p-tests').textContent = APP.stats.tests;
-  document.getElementById('p-score').textContent = APP.stats.tests > 0 ? APP.stats.lastScore + '/10' : '—';
+  html+='</div>';
+  document.getElementById('t-content').innerHTML=html;
 }
 
-// ─── INIT ─────────────────────────────────────────────────
-renderTutorPicks();
-if (localStorage.getItem('tutor')) {
-  GO('dashboard');
+function openChat(){
+  GO('chat');
+  const t=TUTORS[APP.tutor];
+  document.getElementById('chat-title').textContent='Chat with '+t.name;
+  if(!document.getElementById('chat-msgs').children.length)addMsg('ai',t.greet);
+  renderSugs();
 }
+
+function chatFromLesson(lid){
+  APP.openCard=lid;
+  const lesson=getAllLessons().find(l=>l.id===lid);
+  openChat();
+  if(lesson)renderSugs(lesson.title);
+}
+
+function renderSugs(topic){
+  const sug=topic?['Explain '+topic+' in simple terms','Give me an example of '+topic,'Common mistakes with '+topic+'?','How does '+topic+' affect my band score?']:['How do I improve my Reading score?','What is True / False / Not Given?','How do I write a Band 7 essay?','Tips for Listening Section 4?','How to speak for 2 minutes in Part 2?','What vocabulary for Writing Task 1?'];
+  document.getElementById('chat-sug').innerHTML=sug.map(s=>'<button class="cs" onclick="sendSug(\''+s.replace(/'/g,"&#39;")+'\')">'+ s+'</button>').join('');
+}
+
+function sendSug(text){document.getElementById('chat-in').value=text.replace(/&#39;/g,"'");sendChat();}
+
+function addMsg(role,text){
+  const t=TUTORS[APP.tutor];
+  const msgs=document.getElementById('chat-msgs');
+  const div=document.createElement('div');
+  div.className='cmsg '+role;
+  div.innerHTML='<div class="cav" style="background:'+(role==='ai'?t.color:'#8FA0BC')+'">'+(role==='ai'?t.emoji:'👤')+'</div><div><div class="cname">'+(role==='ai'?t.name:'You')+'</div><div class="cbub">'+text+'</div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chat-msgs');
+  const div=document.createElement('div');
+  div.className='cmsg ai';div.id='typing';
+  div.innerHTML='<div class="cav" style="background:'+TUTORS[APP.tutor].color+'">'+TUTORS[APP.tutor].emoji+'</div><div><div class="typing-bub"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chat-in');
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';inp.style.height='auto';
+  addMsg('user',text);
+  APP.chatHistory.push({role:'user',content:text});
+  showTyping();
+  document.getElementById('send-btn').disabled=true;
+  try{
+    const t=TUTORS[APP.tutor];
+    const ctx=APP.openCard?(getAllLessons().find(l=>l.id===APP.openCard)?.title||''):'General IELTS preparation';
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:APP.chatHistory.slice(-10),system:t.system.replace('{LESSON}',ctx)})});
+    document.getElementById('typing')?.remove();
+    document.getElementById('send-btn').disabled=false;
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error||'Server error '+res.status);}
+    const data=await res.json();
+    const reply=(data.text||'').trim();
+    if(!reply){addMsg('ai','Sorry I did not get a response. Please try again.');return;}
+    APP.chatHistory.push({role:'assistant',content:reply});
+    addMsg('ai',reply);
+  }catch(err){
+    document.getElementById('typing')?.remove();
+    document.getElementById('send-btn').disabled=false;
+    const msg=err.message.includes('fetch')?'Cannot reach server. Check internet connection or Vercel deployment.':'Error: '+err.message;
+    addMsg('ai','⚠️ '+msg);
+    showToast(msg.substring(0,80));
+  }
+}
+
+const chatIn=document.getElementById('chat-in');
+chatIn.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px';});
+chatIn.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}});
+
+function animBars(){
+  document.querySelectorAll('.brf').forEach(b=>{const w=b.dataset.w;setTimeout(()=>{b.style.width=w+'%';},150);});
+  document.getElementById('p-tests').textContent=APP.stats.tests;
+  document.getElementById('p-score').textContent=APP.stats.tests>0?APP.stats.lastScore+'/10':'—';
+}
+
+(function init(){
+  const saved=localStorage.getItem('sp_tutor');
+  if(saved&&TUTORS[saved]){
+    APP.tutor=saved;
+    document.getElementById('d-name').textContent=TUTORS[saved].name+' — IELTS Tutor';
+    document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('on'));
+    document.getElementById('pick-'+saved)?.classList.add('on');
+    GO('dashboard');
+  }
+})();
 </script>
 </body>
 </html>
